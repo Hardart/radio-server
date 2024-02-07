@@ -1,7 +1,7 @@
 import { Parser } from 'icecast-parser'
 import { Socket } from 'socket.io'
 const url_old = 'https://drh-connect.dline-media.com/onair'
-const url = 'http://87.251.66.75:56565/rshstream'
+// const url = 'http://87.251.66.75:56565/rshstream'
 
 export const readStream = (socket: Socket) => {
   const radioStation = new Parser({ url: url_old, emptyInterval: 2, errorInterval: 5, metadataInterval: 4 })
@@ -49,6 +49,7 @@ function socketToMetadata(socket: Socket) {
 
     artistCache = trackMeta.artistName // название артиста в кеш
     socket.emit('radio:track', trackMeta) // отправляем на клиент данные
+    return
   }
 }
 
