@@ -56,7 +56,7 @@ function socketToMetadata(socket: Socket) {
 async function iTunesMetadata(searchTerm: string) {
   const params = new URLSearchParams({ term: searchTerm, limit: '1', entity: 'song', media: 'music' })
   const response = await fetch(`https://itunes.apple.com/search?${params}`)
-  const { results } = await response.json()
+  const { results } = (await response.json()) as ItunesResponse
   return getArtWork(results[0])
 }
 
