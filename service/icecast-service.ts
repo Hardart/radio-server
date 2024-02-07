@@ -1,5 +1,14 @@
 import { Parser } from 'icecast-parser'
 import { Socket } from 'socket.io'
+interface ItunesResponse {
+  resultCount: number
+  results: ItunesSong[]
+}
+interface ItunesSong {
+  artistName: string
+  artworkUrl60: string
+  artworkUrl100: string
+}
 const url_old = 'https://drh-connect.dline-media.com/onair'
 // const url = 'http://87.251.66.75:56565/rshstream'
 
