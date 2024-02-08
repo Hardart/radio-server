@@ -27,9 +27,9 @@ export class Itunes {
     return MetadataService.setCoversSize(data.results[0])
   }
 
-  private static async fetchTrack(): Promise<ItunesResponse> {
+  private static async fetchTrack() {
     const response = await fetch(`https://itunes.apple.com/search?${this.searchParams}`)
-    return await response.json()
+    return (await response.json()) as ItunesResponse
   }
 
   private static get searchParams() {
