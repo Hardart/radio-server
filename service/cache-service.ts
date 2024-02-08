@@ -1,15 +1,25 @@
-import { ICoverData } from '../types'
+import type { ICoverData } from '../types'
 
 export class CacheService {
   private static covers: ICoverData | null = null
   private static streamTitle: string
 
-  static addCovers(covers: ICoverData) {
-    this.covers = covers
+  private static trackMeta = {
+    artistName: '',
+    trackTitle: '',
+    covers: {},
   }
 
-  static addStreamTitle(streamTitle: string) {
-    this.streamTitle = streamTitle
+  static get metaData() {
+    return this.trackMeta
+  }
+
+  static saveTrack(artistName: string, trackTitle: string) {
+    this.trackMeta.artistName = artistName
+    this.trackMeta.trackTitle = trackTitle
+  }
+  static saveCovers(covers: ICoverData) {
+    this.trackMeta.covers = covers
   }
 
   static isCached(streamTitle: string) {

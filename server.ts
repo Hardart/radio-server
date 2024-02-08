@@ -1,7 +1,6 @@
 import express from 'express'
 import { createServer } from 'http'
 import { Server, Socket } from 'socket.io'
-// import { onConnection } from './service/socket-service'
 import { IcecastService } from './service/icecast-service'
 import { CacheService } from './service/cache-service'
 
@@ -32,6 +31,6 @@ startServer()
 const icecast = new IcecastService()
 icecast.initRadioStream()
 io.on('connection', (socket: Socket) => {
-  if (CacheService.isCached(icecast.trackTitle)) socket.emit('radio:track', icecast.trackMeta)
+  socket.emit('radio:track', CacheService.metaData)
   icecast.initSocket(io)
 })
