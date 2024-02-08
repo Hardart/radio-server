@@ -1,8 +1,9 @@
 import express from 'express'
 import { createServer } from 'http'
-import { Server } from 'socket.io'
-
-import { onConnection } from './service/socket-service'
+import { Server, Socket } from 'socket.io'
+// import { onConnection } from './service/socket-service'
+import { IcecastService } from './service/icecast-service'
+import { CacheService } from './service/cache-service'
 
 const app = express()
 
@@ -28,5 +29,9 @@ async function startServer() {
 }
 
 startServer()
-
-io.on('connection', onConnection)
+const icecast = new IcecastService()
+icecast.initRadioStream()
+io.on('connection', (socket: Socket) => {
+  if (CacheService.isCached(icecast.trackTitle)) socket.emit('radio:track', icecast.trackMeta)
+  icecast.initSocket(io)
+})

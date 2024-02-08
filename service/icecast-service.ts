@@ -1,14 +1,75 @@
 import { Parser } from 'icecast-parser'
-import { Socket } from 'socket.io'
-interface ItunesResponse {
-  resultCount: number
-  results: ItunesSong[]
+import { Server, Socket } from 'socket.io'
+import type { ItunesResponse } from '../types'
+import { Itunes, MetadataService } from './metadata-service'
+import { CacheService } from './cache-service'
+
+const simpleMeta = {
+  artistName: 'Радио Штаны',
+  trackTitle: '',
+  covers: {
+    art30: '/images/simple_logo.svg',
+    art60: '/images/simple_logo.svg',
+    art100: '/images/simple_logo.svg',
+  },
 }
-interface ItunesSong {
-  artistName: string
-  artworkUrl60: string
-  artworkUrl100: string
+
+export class IcecastService {
+  socket: Server
+  private url_old = 'https://drh-connect.dline-media.com/onair'
+  private emptyInterval = 4
+  private errorInterval = 5
+  private metadataInterval = 3
+  trackTitle: string = ''
+  trackMeta = {
+    artistName: '',
+    trackTitle: '',
+    covers: {},
+  }
+  // private url = 'http://87.251.66.75:56565/rshstream'
+  initRadioStream() {
+    const radioStation = new Parser({
+      url: this.url_old,
+      emptyInterval: this.emptyInterval,
+      errorInterval: this.errorInterval,
+      metadataInterval: this.metadataInterval,
+    })
+    radioStation.on('metadata', this.onMetadata.bind(this))
+    radioStation.on('error', console.log)
+    radioStation.on('empty', this.onEmpty)
+  }
+
+  initSocket(io: Server) {
+    this.socket = io
+  }
+
+  private async onMetadata(metadata: Map<string, string>) {
+    const streamTitle = metadata.get('StreamTitle')
+    if (this.trackTitle === streamTitle) return console.log('same')
+    if (!streamTitle) return console.log(undefined)
+    this.trackTitle = streamTitle
+    const { searchTerm, artistTitle, trackTitile } = MetadataService.parseTrackName(streamTitle)
+    console.log(streamTitle)
+    this.trackMeta.artistName = artistTitle
+    this.trackMeta.trackTitle = trackTitile
+
+    try {
+      const response = await Itunes.searchOneTrack(searchTerm)
+      console.log(response)
+      CacheService.addCovers(response)
+      this.trackMeta.covers = response
+    } catch (error) {
+      this.trackMeta.covers = simpleMeta.covers
+    }
+    CacheService.addStreamTitle(streamTitle)
+    this.socket.emit('radio:track', this.trackMeta)
+  }
+
+  private onEmpty() {
+    // console.log('empty meta')
+  }
 }
+
 const url_old = 'https://drh-connect.dline-media.com/onair'
 // const url = 'http://87.251.66.75:56565/rshstream'
 
@@ -16,12 +77,6 @@ export const readStream = (socket: Socket) => {
   const radioStation = new Parser({ url: url_old, emptyInterval: 2, errorInterval: 5, metadataInterval: 4 })
   radioStation.on('metadata', socketToMetadata(socket))
   radioStation.on('error', console.log)
-}
-
-const simpleMeta = {
-  artistName: 'Радио Штаны',
-  trackTitle: '',
-  covers: { art30: '/images/simple_logo.svg', art60: '/images/simple_logo.svg', art100: '/images/simple_logo.svg' },
 }
 
 let coversCache: null | object = null
@@ -36,7 +91,7 @@ function socketToMetadata(socket: Socket) {
   }
   return async function onMetadata(metadata: Map<string, string>) {
     const metadataTitle = metadata.get('StreamTitle')
-    if (streamTitle === metadataTitle) return
+    if (streamTitle === metadataTitle) return console.log('same')
     streamTitle = metadataTitle ?? 'unknown'
     if (streamTitle === 'unknown') return socket.emit('radio:jingle', simpleMeta)
     const { searchTerm, artistTitle, trackTitile } = splitTrackName(streamTitle) // получаем название артиста и трека

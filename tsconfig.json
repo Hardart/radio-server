@@ -16,6 +16,7 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": ["./types", "./node_modules/@types"]
   }
 }

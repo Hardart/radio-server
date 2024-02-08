@@ -1,6 +1,9 @@
 import { Socket } from 'socket.io'
-import { readStream } from './icecast-service'
-
+import { IcecastService } from './icecast-service'
+const icecast = new IcecastService()
+icecast.initRadioStream()
 export function onConnection(socket: Socket) {
-  socket.on('radio:play', () => readStream(socket))
+  // icecast.readStream(socket)
+  console.log(socket.id)
+  // socket.on('radio:play', () => readStream(socket))
 }
