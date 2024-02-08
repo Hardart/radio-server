@@ -16,7 +16,7 @@ const simpleMeta = {
 }
 
 export class IcecastService {
-  socket: Server
+  socket: Server | undefined = undefined
   // private url_old = 'https://drh-connect.dline-media.com/onair'
   private url = 'https://stream.lolamedia.ru/rsh_federal'
   private emptyInterval = 4
