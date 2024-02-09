@@ -16,8 +16,7 @@ const simpleMeta = {
 }
 
 export class IcecastService {
-  socket: Server | undefined = undefined
-  // private url_old = 'https://drh-connect.dline-media.com/onair'
+  io: Server | undefined = undefined
   private url = 'https://stream.lolamedia.ru/rsh_federal'
   private emptyInterval = 4
   private errorInterval = 5
@@ -37,16 +36,15 @@ export class IcecastService {
   }
 
   initSocket(io: Server) {
-    this.socket = io
+    this.io = io
   }
 
   private async onMetadata(metadata: Map<string, string>) {
     const streamTitle = metadata.get('StreamTitle')
     if (this.trackTitle === streamTitle) return
-    if (!streamTitle) return this.socket ? this.socket.emit('radio:jingle', simpleMeta) : undefined
+    if (!streamTitle) return this.io ? this.io.emit('radio:jingle', simpleMeta) : undefined
     this.trackTitle = streamTitle
     const { searchTerm, artistTitle, trackTitile } = MetadataService.parseTrackName(streamTitle)
-    console.log(streamTitle)
 
     CacheService.saveTrack(artistTitle, trackTitile)
     try {
@@ -56,7 +54,7 @@ export class IcecastService {
       CacheService.saveCovers(simpleMeta.covers)
     }
 
-    if (this.socket) this.socket.emit('radio:track', CacheService.metaData)
+    if (this.io) this.io.emit('radio:track', CacheService.metaData)
     return
   }
 

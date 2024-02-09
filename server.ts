@@ -1,8 +1,6 @@
 import express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-// import { IcecastService } from './service/icecast-service'
-// import { CacheService } from './service/cache-service'
 import { onConnection } from './service/socket-service'
 
 const app = express()
