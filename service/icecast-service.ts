@@ -52,7 +52,6 @@ export class IcecastService {
     try {
       const response = await Itunes.searchOneTrack(searchTerm)
       CacheService.saveCovers(response)
-      console.log(response)
     } catch (error) {
       CacheService.saveCovers(simpleMeta.covers)
     }

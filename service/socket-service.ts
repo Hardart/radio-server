@@ -1,9 +1,11 @@
-import { Socket } from 'socket.io'
+import { Server } from 'socket.io'
 import { IcecastService } from './icecast-service'
+import { CacheService } from './cache-service'
 const icecast = new IcecastService()
 icecast.initRadioStream()
-export function onConnection(socket: Socket) {
-  // icecast.readStream(socket)
-  console.log(socket.id)
-  // socket.on('radio:play', () => readStream(socket))
+export function onConnection(io: Server) {
+  return function () {
+    io.emit('radio:track', CacheService.metaData)
+    icecast.initSocket(io)
+  }
 }
