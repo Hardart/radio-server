@@ -1,10 +1,8 @@
-import type { ICoverData } from '../types'
-
 export class CacheService {
   private static trackMeta = {
     artistName: '',
     trackTitle: '',
-    covers: {},
+    cover: '',
   }
 
   static get metaData() {
@@ -15,7 +13,8 @@ export class CacheService {
     this.trackMeta.artistName = artistName
     this.trackMeta.trackTitle = trackTitle
   }
-  static saveCovers(covers: ICoverData) {
-    this.trackMeta.covers = covers
+
+  static saveCovers(cover: string) {
+    this.trackMeta.cover = cover
   }
 }

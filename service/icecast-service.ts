@@ -2,17 +2,12 @@ import { Parser } from 'icecast-parser'
 import { Server } from 'socket.io'
 import { Itunes, MetadataService } from './metadata-service'
 import { CacheService } from './cache-service'
+import { TrackService } from './track-service'
 
 const simpleMeta = {
   artistName: 'Радио Штаны',
   trackTitle: '',
-  covers: {
-    art30: '/images/simple_logo.svg',
-    art60: '/images/simple_logo.svg',
-    art100: '/images/simple_logo.svg',
-    art300: '/images/simple_logo.svg',
-    art600: '/images/simple_logo.svg',
-  },
+  cover: '/images/simple_logo.svg',
 }
 
 export class IcecastService {
@@ -44,21 +39,32 @@ export class IcecastService {
     if (this.trackTitle === streamTitle) return
     if (!streamTitle) return this.io ? this.io.emit('radio:jingle', simpleMeta) : undefined
     this.trackTitle = streamTitle
-    const { searchTerm, artistTitle, trackTitile } = MetadataService.parseTrackName(streamTitle)
+    const { searchTerm, artistName, trackTitle } = MetadataService.parseTrackName(streamTitle)
+    CacheService.saveTrack(artistName, trackTitle)
 
-    CacheService.saveTrack(artistTitle, trackTitile)
-    try {
-      const response = await Itunes.searchOneTrack(searchTerm)
-      CacheService.saveCovers(response)
-    } catch (error) {
-      CacheService.saveCovers(simpleMeta.covers)
-    }
-
+    await this.saveMetadata(searchTerm)
     if (this.io) this.io.emit('radio:track', CacheService.metaData)
     return
   }
 
   private onEmpty() {
     console.log('empty meta')
+  }
+
+  private async saveMetadata(searchTerm: string) {
+    const { artistName, trackTitle } = CacheService.metaData
+    try {
+      const track = await TrackService.findOne(artistName, trackTitle)
+      if (track) {
+        CacheService.saveCovers(track.cover!)
+      } else {
+        const { cover, preview } = await Itunes.searchOneTrack(searchTerm)
+        CacheService.saveCovers(cover)
+        await TrackService.save({ artistName, trackTitle, cover, preview })
+      }
+    } catch (error) {
+      CacheService.saveCovers(simpleMeta.cover)
+      TrackService.save({ artistName, trackTitle, cover: simpleMeta.cover, preview: '' })
+    }
   }
 }

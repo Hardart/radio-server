@@ -1,8 +1,10 @@
+import * as dotenv from 'dotenv'
 import express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { onConnection } from './service/socket-service'
-
+import mongoose from 'mongoose'
+dotenv.config({ path: __dirname + '/.env' })
 const app = express()
 
 const PORT = process.env.PORT || 3068
@@ -13,7 +15,9 @@ const io = new Server(httpServer, {
 
 async function startServer() {
   try {
-    // console.log('====================================\nБД подключена\n====================================')
+    await mongoose.connect(process.env.DB_URL_LOCAL || '')
+    console.log('====================================')
+    console.log(`ДБ подключена`)
     httpServer.listen(PORT, () => {
       console.log('====================================')
       console.log(`Сервер запущен, порт: ${PORT}`)

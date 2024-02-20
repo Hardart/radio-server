@@ -7,12 +7,14 @@ export interface ItunesSong {
   artworkUrl30: string
   artworkUrl60: string
   artworkUrl100: string
+  previewUrl: string
 }
 
 export interface ITrackMetadata {
   artistName: string
   trackTitle: string
-  covers: ICoverData
+  cover: string
+  preview: string
 }
 
 export interface ICoverData {

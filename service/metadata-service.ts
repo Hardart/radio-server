@@ -13,8 +13,8 @@ export class MetadataService {
   }
 
   static parseTrackName(title: string) {
-    const [artistTitle, trackTitile] = title.split(' - ')
-    return { artistTitle, trackTitile, searchTerm: [artistTitle, trackTitile].join(' ') }
+    const [artistName, trackTitle] = title.split(' - ')
+    return { artistName, trackTitle, searchTerm: [artistName, trackTitle].join(' ') }
   }
 }
 
@@ -24,7 +24,8 @@ export class Itunes {
   static async searchOneTrack(searchTerm: string) {
     this.term = searchTerm
     const data = await this.fetchTrack()
-    return MetadataService.setCoversSize(data.results[0])
+    const { artworkUrl60, previewUrl } = data.results[0]
+    return { cover: artworkUrl60, preview: previewUrl }
   }
 
   private static async fetchTrack() {
