@@ -3,6 +3,7 @@ import { Server } from 'socket.io'
 import { Itunes, MetadataService } from './metadata-service'
 import { CacheService } from './cache-service'
 import { TrackService } from './track-service'
+import { ArchiveTrackService } from './archive-service'
 
 const simpleMeta = {
   artistName: 'Радио Штаны',
@@ -56,15 +57,18 @@ export class IcecastService {
     try {
       const track = await TrackService.findOne(artistName, trackTitle)
       if (track) {
-        CacheService.saveCovers(track.cover!)
+        ArchiveTrackService.save(track.id)
+        CacheService.saveCovers(track.cover || '')
       } else {
         const { cover, preview } = await Itunes.searchOneTrack(searchTerm)
         CacheService.saveCovers(cover)
-        await TrackService.save({ artistName, trackTitle, cover, preview })
+        const id = await TrackService.save({ artistName, trackTitle, cover, preview })
+        ArchiveTrackService.save(id)
       }
     } catch (error) {
       CacheService.saveCovers(simpleMeta.cover)
-      TrackService.save({ artistName, trackTitle, cover: simpleMeta.cover, preview: '' })
+      const id = await TrackService.save({ artistName, trackTitle, cover: simpleMeta.cover, preview: '' })
+      ArchiveTrackService.save(id)
     }
   }
 }

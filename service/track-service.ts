@@ -9,6 +9,7 @@ export class TrackService {
 
   static async save(trackData: ITrackMetadata) {
     const track = new Track(trackData)
-    await track.save()
+    const { id } = await track.save()
+    return id
   }
 }
