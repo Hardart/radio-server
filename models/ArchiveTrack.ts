@@ -8,5 +8,21 @@ const ArchiveTrackSchema = new Schema(
   { timestamps: false, versionKey: false }
 )
 
+ArchiveTrackSchema.set('toJSON', {
+  versionKey: false,
+  transform: function (_, ret) {
+    ret.track = ret.trackId
+    delete ret._id
+    delete ret.trackId
+  },
+})
+
+ArchiveTrackSchema.virtual('track', {
+  ref: 'Track',
+  localField: 'trackId',
+  foreignField: '_id',
+  justOne: true,
+})
+
 export type ArchiveTrack = InferSchemaType<typeof ArchiveTrackSchema>
 export const ArchiveTrack = model('ArchiveTrack', ArchiveTrackSchema)

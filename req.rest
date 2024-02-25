@@ -1,0 +1,29 @@
+### NEWS
+GET   http://localhost:3068/api/news
+Content-Type: application/json
+
+### ARTICLE
+POST  http://localhost:3068/api/article
+Content-Type: application/json
+
+{
+  "slug": "vsya-v-papu-nort-uest-zachitala-rep-v-novom-treke-kanye"
+}
+### ARTICLE
+POST  http://localhost:3068/api/tag
+Content-Type: application/json
+
+{
+  "slug": "vsya-v-papu-nort-uest-zachitala-rep-v-novom-treke-kanye"
+}
+### TRACK
+GET  http://localhost:3068/api/track
+Content-Type: application/json
+
+### TRACKS_HISTORY
+POST  http://radio.hardart.site:3009/api/history
+Content-Type: application/json
+
+{
+  "date": "2024-02-25T00:00:00.000Z"
+}
