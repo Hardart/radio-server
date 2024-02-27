@@ -41,14 +41,14 @@ const menu = [
 class ArticleService {
   async all() {
     const articles = await Article.find()
-      .select(['text', 'slug', 'title', 'createdAt', 'url', 'preview'])
+      .select(['content', 'slug', 'title', 'createdAt', 'url', 'preview', 'isPublished'])
       .sort({ createdAt: 'desc' })
-      .populate('category', ['title', 'slug'])
+      .populate('categoryId', ['title', 'slug'])
     return articles
   }
 
   async findBySlug(slug: string) {
-    return await Article.findOne({ slug }).populate('category')
+    return await Article.findOne({ slug }).populate('categoryId')
   }
 
   async getMenu() {
@@ -57,6 +57,12 @@ class ArticleService {
 
   async findByTag(tagTitle: string) {
     return await Tag.findOne({ title: tagTitle }).populate('articles')
+  }
+
+  async add(data: Article) {
+    // console.log(data)
+    const article = new Article(data)
+    return await article.save()
   }
 }
 

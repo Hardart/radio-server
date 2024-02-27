@@ -4,8 +4,8 @@ const CategorySchema = new Schema(
   {
     title: String,
     slug: String,
-    preview: String,
-    text: String,
+    image: String,
+    description: String,
     isPublished: { type: Boolean, default: false },
   },
   { timestamps: true, versionKey: false, toObject: { virtuals: true } }

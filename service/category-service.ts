@@ -41,6 +41,11 @@ class CategoryService {
       ])
     )[0]
   }
+
+  async add(data: Category) {
+    const cat = new Category(data)
+    return await cat.save()
+  }
 }
 
 export default new CategoryService()

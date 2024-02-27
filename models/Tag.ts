@@ -3,8 +3,6 @@ import { Schema, model, InferSchemaType } from 'mongoose'
 const TagSchema = new Schema(
   {
     title: String,
-    slug: String,
-    isPublished: { type: Boolean, default: false },
     articles: [{ type: Schema.Types.ObjectId, ref: 'Article' }],
   },
   { timestamps: true, versionKey: false, toObject: { virtuals: true } }

@@ -1,14 +1,16 @@
 ### NEWS
-GET   http://localhost:3068/api/news
+POST   http://localhost:3068/api/news
 Content-Type: application/json
 
-### ARTICLE
-POST  http://localhost:3068/api/article
+### CATEGORY
+POST  http://localhost:3068/admin/category-add
 Content-Type: application/json
 
 {
-  "slug": "vsya-v-papu-nort-uest-zachitala-rep-v-novom-treke-kanye"
+  "title": "Горячие Новости",
+  "slug": "hot-news"
 }
+
 ### ARTICLE
 POST  http://localhost:3068/api/tag
 Content-Type: application/json

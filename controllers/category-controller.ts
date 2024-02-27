@@ -22,6 +22,17 @@ class CategoryController {
     const category = await categoryService.filterBy(filter)
     return res.json(category)
   }
+
+  async addOne(req: Request, res: Response, next: any) {
+    try {
+      const catData = req.body
+      const cat = await categoryService.add(catData)
+      return res.json(cat)
+    } catch (error) {
+      next(error)
+      return
+    }
+  }
 }
 
 export default new CategoryController()

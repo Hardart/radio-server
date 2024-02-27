@@ -17,11 +17,22 @@ class ArticleController {
       return
     }
   }
+
   async oneByTag(req: Request, res: Response, next: any) {
     console.log(req.body)
     try {
       const articles = await articleService.findByTag('музыка')
       return res.json(articles)
+    } catch (error) {
+      next(error)
+      return
+    }
+  }
+  async addOne(req: Request, res: Response, next: any) {
+    try {
+      const articleData = req.body
+      const article = await articleService.add(articleData)
+      return res.json(article)
     } catch (error) {
       next(error)
       return

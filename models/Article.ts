@@ -5,20 +5,23 @@ const ArticleSchema = new Schema(
     title: String,
     slug: String,
     preview: String,
-    text: String,
+    content: String,
     url: String,
-    images: [String],
     isPublished: { type: Boolean, default: false },
-    category: { type: Schema.Types.ObjectId, ref: 'Category' },
+    categoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
+    tags: [String],
   },
   { timestamps: true, versionKey: false, toObject: { virtuals: true } }
 )
 
 ArticleSchema.set('toJSON', {
   versionKey: false,
+  virtuals: true,
   transform: function (_, ret) {
+    ret.category = ret.categoryId
     delete ret._id
     delete ret.__v
+    delete ret.categoryId
   },
 })
 

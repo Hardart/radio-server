@@ -1,9 +1,10 @@
 import { Parser } from 'icecast-parser'
 import { Server } from 'socket.io'
-import { Itunes, MetadataService } from './metadata-service'
+import { MetadataService } from './metadata-service'
 import { CacheService } from './cache-service'
 import { TrackService } from './track-service'
 import { ArchiveTrackService } from './archive-service'
+import { Itunes } from './iTunes-service'
 
 const simpleMeta = {
   artistName: 'Радио Штаны',
