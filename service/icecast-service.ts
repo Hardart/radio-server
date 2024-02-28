@@ -14,7 +14,7 @@ const simpleMeta = {
 
 export class IcecastService {
   io: Server | undefined = undefined
-  private url = 'http://localhost:8000/rsh_federal'
+  private url = 'http://localhost:80/rsh_federal'
   private emptyInterval = 4
   private errorInterval = 5
   private metadataInterval = 5
@@ -26,6 +26,7 @@ export class IcecastService {
       emptyInterval: this.emptyInterval,
       errorInterval: this.errorInterval,
       metadataInterval: this.metadataInterval,
+      notifyOnChangeOnly: true,
     })
     radioStation.on('metadata', this.onMetadata.bind(this))
     radioStation.on('error', console.log)
