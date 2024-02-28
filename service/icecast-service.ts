@@ -26,8 +26,7 @@ export class IcecastService {
       emptyInterval: this.emptyInterval,
       errorInterval: this.errorInterval,
       metadataInterval: this.metadataInterval,
-      autoUpdate: false,
-      keepListen: true,
+      userAgent: 'HDRT_Parser',
     })
     radioStation.on('metadata', this.onMetadata.bind(this))
     radioStation.on('error', console.log)
