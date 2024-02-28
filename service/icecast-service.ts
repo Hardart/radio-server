@@ -39,6 +39,7 @@ export class IcecastService {
 
   private async onMetadata(metadata: Map<string, string>) {
     const streamTitle = metadata.get('StreamTitle')
+    console.log(streamTitle)
     if (this.trackTitle === streamTitle) return
     if (!streamTitle) return this.io ? this.io.emit('radio:jingle', simpleMeta) : undefined
     this.trackTitle = streamTitle
