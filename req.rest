@@ -1,5 +1,5 @@
 ### NEWS
-POST   http://localhost:3068/api/news
+GET   http://localhost:3068/api/news
 Content-Type: application/json
 
 ### CATEGORY
@@ -28,9 +28,5 @@ GET  http://localhost:3068/api/main
 Content-Type: application/json
 
 ### TRACKS_HISTORY
-POST  http://radio.hardart.site:3009/api/history
+GET  http://radio.hardart.site:3068/api/news
 Content-Type: application/json
-
-{
-  "date": "2024-02-25T00:00:00.000Z"
-}

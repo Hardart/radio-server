@@ -14,7 +14,7 @@ const simpleMeta = {
 
 export class IcecastService {
   io: Server | undefined = undefined
-  private url = 'https://stream.lolamedia.ru/rsh_federal'
+  private url = 'http://localhost:8000'
   private emptyInterval = 4
   private errorInterval = 5
   private metadataInterval = 5
