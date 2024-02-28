@@ -26,7 +26,7 @@ export class IcecastService {
       emptyInterval: this.emptyInterval,
       errorInterval: this.errorInterval,
       metadataInterval: this.metadataInterval,
-      notifyOnChangeOnly: true,
+      keepListen: false,
     })
     radioStation.on('metadata', this.onMetadata.bind(this))
     radioStation.on('error', console.log)
