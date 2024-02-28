@@ -14,7 +14,7 @@ const simpleMeta = {
 
 export class IcecastService {
   io: Server | undefined = undefined
-  private url = 'http://localhost:8000/rsh_federal'
+  private url = 'https://stream.lolamedia.ru/rsh_federal'
   private emptyInterval = 4
   private errorInterval = 5
   private metadataInterval = 5
@@ -39,7 +39,6 @@ export class IcecastService {
 
   private async onMetadata(metadata: Map<string, string>) {
     const streamTitle = metadata.get('StreamTitle')
-    console.log(streamTitle)
     if (this.trackTitle === streamTitle) return
     if (!streamTitle) return this.io ? this.io.emit('radio:jingle', simpleMeta) : undefined
     this.trackTitle = streamTitle
