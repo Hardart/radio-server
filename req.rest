@@ -18,8 +18,13 @@ Content-Type: application/json
 {
   "slug": "vsya-v-papu-nort-uest-zachitala-rep-v-novom-treke-kanye"
 }
+
 ### TRACK
 GET  http://localhost:3068/api/track
+Content-Type: application/json
+
+### PAGE_MAIN
+GET  http://localhost:3068/api/main
 Content-Type: application/json
 
 ### TRACKS_HISTORY

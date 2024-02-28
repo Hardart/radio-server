@@ -1,10 +1,19 @@
 import articleService from '../service/article-service'
 import type { Response, Request } from 'express'
+import type { ArticleQuery } from '../types/article'
 
 class ArticleController {
-  async all(_: Request, res: Response) {
-    const articles = await articleService.all()
-    return res.json(articles)
+  async all(req: Request, res: Response, next: any) {
+    try {
+      const query = req.query as ArticleQuery
+      const articles = await articleService.all(query)
+      const count = await articleService.count()
+      res.setHeader('X-Total', count)
+      return res.json(articles)
+    } catch (error) {
+      next(error)
+      return
+    }
   }
 
   async one(req: Request, res: Response, next: any) {
@@ -18,8 +27,7 @@ class ArticleController {
     }
   }
 
-  async oneByTag(req: Request, res: Response, next: any) {
-    console.log(req.body)
+  async oneByTag(_: Request, res: Response, next: any) {
     try {
       const articles = await articleService.findByTag('музыка')
       return res.json(articles)

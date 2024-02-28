@@ -11,10 +11,10 @@ const ArticleSchema = new Schema(
     categoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
     tags: [String],
   },
-  { timestamps: true, versionKey: false, toObject: { virtuals: true } }
+  { timestamps: true, versionKey: false }
 )
 
-ArticleSchema.set('toJSON', {
+ArticleSchema.set('toObject', {
   versionKey: false,
   virtuals: true,
   transform: function (_, ret) {
@@ -22,6 +22,19 @@ ArticleSchema.set('toJSON', {
     delete ret._id
     delete ret.__v
     delete ret.categoryId
+    delete ret.category._id
+    ret.url = `/${ret.category.slug}/${ret.slug}`
+  },
+})
+
+ArticleSchema.set('toJSON', {
+  versionKey: false,
+  virtuals: false,
+  transform: function (_, ret) {
+    ret.category = ret.categoryId
+    delete ret.__v
+    delete ret.categoryId
+    ret.url = `/${ret.category.slug}/${ret.slug}`
   },
 })
 

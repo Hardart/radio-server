@@ -1,5 +1,6 @@
 import { Article } from '../models/Article'
 import { Tag } from '../models/Tag'
+import type { ArticleQuery } from '../types/article'
 const menu = [
   {
     slug: '',
@@ -38,13 +39,22 @@ const menu = [
     ],
   },
 ]
+const BASE_QUERY = {
+  limit: 12,
+}
 class ArticleService {
-  async all() {
-    const articles = await Article.find()
-      .select(['content', 'slug', 'title', 'createdAt', 'url', 'preview', 'isPublished'])
+  async all({ limit, page, tag }: ArticleQuery) {
+    const articles = await Article.find(tag ? { tags: tag } : {})
+      .select('title slug content isPublished preview createdAt tags -_id')
       .sort({ createdAt: 'desc' })
-      .populate('categoryId', ['title', 'slug'])
+      .populate({ path: 'categoryId', select: 'title slug' })
+      .skip(page ? (Number(page) - 1) * Number(limit) : 0)
+      .limit(Number(limit) || BASE_QUERY.limit)
     return articles
+  }
+
+  async count() {
+    return await Article.countDocuments()
   }
 
   async findBySlug(slug: string) {

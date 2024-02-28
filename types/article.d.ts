@@ -7,3 +7,9 @@ export type Article = {
   createdAt: string
   updatedAt: string
 }
+
+export type ArticleQuery = {
+  limit?: string
+  page?: string
+  tag?: string
+}

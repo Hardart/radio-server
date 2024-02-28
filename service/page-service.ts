@@ -1,3 +1,6 @@
+import type { ArticleQuery } from '../types/article'
+import articleService from './article-service'
+
 const team = [
   {
     name: 'Ella Ward',
@@ -181,6 +184,14 @@ class PageService {
 
   async programs() {
     return schedule
+  }
+
+  async index(query: ArticleQuery) {
+    const pageData = {
+      news: await articleService.all(query),
+      hosts: await this.hosts(),
+    }
+    return pageData
   }
 }
 
