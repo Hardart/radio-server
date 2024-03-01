@@ -1,13 +1,13 @@
 import articleService from '../service/article-service'
-import type { Response, Request } from 'express'
-import type { ArticleQuery } from '../types/article'
+import type { Response, Request, NextFunction } from 'express'
+import type { QueryParams } from '../types/custom-request'
 
 class ArticleController {
-  async all(req: Request, res: Response, next: any) {
+  async all(req: Request, res: Response, next: NextFunction) {
     try {
-      const query = req.query as ArticleQuery
-      const articles = await articleService.all(query)
-      const count = await articleService.count()
+      const filterParams = req.body.filterParams as QueryParams
+      const articles = await articleService.all(filterParams)
+      const count = await articleService.count(filterParams)
       res.setHeader('X-Total', count)
       return res.json(articles)
     } catch (error) {
@@ -16,7 +16,7 @@ class ArticleController {
     }
   }
 
-  async one(req: Request, res: Response, next: any) {
+  async one(req: Request, res: Response, next: NextFunction) {
     const { slug } = req.body as Record<string, string>
     try {
       const articles = await articleService.findBySlug(slug)
@@ -27,7 +27,7 @@ class ArticleController {
     }
   }
 
-  async oneByTag(_: Request, res: Response, next: any) {
+  async oneByTag(_: Request, res: Response, next: NextFunction) {
     try {
       const articles = await articleService.findByTag('музыка')
       return res.json(articles)
@@ -36,7 +36,7 @@ class ArticleController {
       return
     }
   }
-  async addOne(req: Request, res: Response, next: any) {
+  async addOne(req: Request, res: Response, next: NextFunction) {
     try {
       const articleData = req.body
       const article = await articleService.add(articleData)
@@ -45,11 +45,6 @@ class ArticleController {
       next(error)
       return
     }
-  }
-
-  async menu(_: Request, res: Response) {
-    const menu = await articleService.getMenu()
-    return res.json(menu)
   }
 }
 

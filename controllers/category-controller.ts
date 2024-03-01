@@ -2,25 +2,14 @@ import categoryService from '../service/category-service'
 import type { Response, Request } from 'express'
 
 class CategoryController {
-  async getAll(_: Request, res: Response) {
-    const categories = await categoryService.getAll()
-    return res.json(categories)
-  }
-  async findById(req: Request, res: Response) {
-    const { id } = req.body
-    const category = await categoryService.findById(id)
-    return res.json(category)
-  }
-  async findBySlug(req: Request, res: Response) {
-    const { slug } = req.body
-    const category = await categoryService.findBySlug(slug)
-    return res.json(category)
-  }
-  async filterBy(req: Request, res: Response) {
-    const { filter } = req.body
-
-    const category = await categoryService.filterBy(filter)
-    return res.json(category)
+  async getAll(_: Request, res: Response, next: any) {
+    try {
+      const categories = await categoryService.getAll()
+      return res.json(categories)
+    } catch (error) {
+      next(error)
+      return
+    }
   }
 
   async addOne(req: Request, res: Response, next: any) {

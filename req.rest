@@ -1,32 +1,14 @@
 ### NEWS
-GET   http://localhost:3068/api/news
+GET   http://localhost:3068/api/newss
 Content-Type: application/json
 
 ### CATEGORY
-POST  http://localhost:3068/admin/category-add
+GET  http://localhost:3068/api/categories
 Content-Type: application/json
 
-{
-  "title": "Горячие Новости",
-  "slug": "hot-news"
-}
-
-### ARTICLE
-POST  http://localhost:3068/api/tag
-Content-Type: application/json
-
-{
-  "slug": "vsya-v-papu-nort-uest-zachitala-rep-v-novom-treke-kanye"
-}
-
-### TRACK
-GET  http://localhost:3068/api/track
-Content-Type: application/json
 
 ### PAGE_MAIN
 GET  http://localhost:3068/api/main
 Content-Type: application/json
 
-### TRACKS_HISTORY
-GET  http://radio.hardart.site:3068/api/news
-Content-Type: application/json
+

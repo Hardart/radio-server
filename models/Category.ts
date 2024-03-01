@@ -13,6 +13,7 @@ const CategorySchema = new Schema(
 
 CategorySchema.set('toJSON', {
   versionKey: false,
+  virtuals: true,
   transform: function (_, ret) {
     delete ret._id
     delete ret.__v

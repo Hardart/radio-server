@@ -1,4 +1,4 @@
-import type { ArticleQuery } from '../types/article'
+import { QueryParams } from '../types/custom-request'
 import articleService from './article-service'
 
 const team = [
@@ -50,7 +50,6 @@ const team = [
     image: '/images/team/08.webp',
   },
 ]
-
 const mainMenu = [
   {
     slug: '',
@@ -179,19 +178,31 @@ class PageService {
   }
 
   async nav() {
-    return mainMenu
+    return addLinkToMenuItem(mainMenu)
   }
 
   async programs() {
     return schedule
   }
 
-  async index(query: ArticleQuery) {
+  async index(query: QueryParams) {
     const pageData = {
       news: await articleService.all(query),
       hosts: await this.hosts(),
     }
     return pageData
+  }
+}
+
+function addLinkToMenuItem(menuItems: any) {
+  return menuItems.map(mapMenuItem())
+}
+
+function mapMenuItem(parentLink: string = '') {
+  return function (item: any) {
+    item.link = `${parentLink}/${item.slug}`.replace('//', '/')
+    item.childrens = item.childrens?.map(mapMenuItem(item.link))
+    return item
   }
 }
 

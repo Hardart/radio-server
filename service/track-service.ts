@@ -21,10 +21,12 @@ export class TrackService {
   async history(date: string) {
     const fromTime = new Date(date)
     const toTime = new Date(Date.parse(date) + 3 * 3600 * 1000)
-    const tracks = await ArchiveTrack.find({ createdAt: { $gte: fromTime, $lt: toTime } }).populate({
-      path: 'trackId',
-      select: '-createdAt -updatedAt',
-    })
+    const tracks = await ArchiveTrack.find({ createdAt: { $gte: fromTime, $lt: toTime } })
+      .populate({
+        path: 'trackId',
+        select: '-createdAt -updatedAt',
+      })
+      .sort({ createdAt: 'desc' })
     return tracks
   }
 }

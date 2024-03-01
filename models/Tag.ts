@@ -13,6 +13,7 @@ TagSchema.set('toJSON', {
   transform: function (_, ret) {
     delete ret._id
     delete ret.__v
+    ret.name = ret.title
   },
 })
 

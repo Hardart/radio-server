@@ -14,27 +14,14 @@ const ArticleSchema = new Schema(
   { timestamps: true, versionKey: false }
 )
 
-ArticleSchema.set('toObject', {
+ArticleSchema.set('toJSON', {
   versionKey: false,
   virtuals: true,
   transform: function (_, ret) {
     ret.category = ret.categoryId
+    ret.url = `/${ret.category.slug}/${ret.slug}`
     delete ret._id
-    delete ret.__v
     delete ret.categoryId
-    delete ret.category._id
-    ret.url = `/${ret.category.slug}/${ret.slug}`
-  },
-})
-
-ArticleSchema.set('toJSON', {
-  versionKey: false,
-  virtuals: false,
-  transform: function (_, ret) {
-    ret.category = ret.categoryId
-    delete ret.__v
-    delete ret.categoryId
-    ret.url = `/${ret.category.slug}/${ret.slug}`
   },
 })
 
