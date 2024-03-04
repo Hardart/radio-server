@@ -1,7 +1,6 @@
 import pageService from '../service/page-service'
 import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
-import articleService from '../service/article-service'
 import tagService from '../service/tag-service'
 
 class PageController {
@@ -17,8 +16,9 @@ class PageController {
 
   async meta(_: Request, res: Response, next: NextFunction) {
     try {
-      const data = await pageService.nav()
-      return res.json(data)
+      const navList = await pageService.nav()
+      const tags = await tagService.all()
+      return res.json({ navList, tags })
     } catch (error) {
       next(error)
       return
@@ -46,12 +46,10 @@ class PageController {
     }
   }
 
-  async news(req: Request, res: Response, next: NextFunction) {
+  async news(_: Request, res: Response, next: NextFunction) {
     try {
-      const query = req.body.filterParams as QueryParams
-      const news = await articleService.all(query)
       const tags = await tagService.all()
-      return res.json({ news, tags })
+      return res.json({ tags })
     } catch (error) {
       next(error)
       return

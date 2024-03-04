@@ -1,5 +1,5 @@
 ### NEWS
-GET   http://localhost:3068/api/newss
+GET   http://localhost:3068/api/news
 Content-Type: application/json
 
 ### CATEGORY

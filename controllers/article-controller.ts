@@ -17,7 +17,7 @@ class ArticleController {
   }
 
   async one(req: Request, res: Response, next: NextFunction) {
-    const { slug } = req.body as Record<string, string>
+    const { slug } = req.query as Record<string, string>
     try {
       const articles = await articleService.findBySlug(slug)
       return res.json(articles)

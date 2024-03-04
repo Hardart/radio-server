@@ -5,7 +5,7 @@ import type { QueryParams } from '../types/custom-request'
 class ArticleService {
   async all({ filter, sort, limit, page }: QueryParams) {
     const articles = await Article.find({ $and: filter })
-      .select('title slug content isPublished preview createdAt tags')
+      .select('title slug preview createdAt')
       .populate({ path: 'categoryId', select: 'title slug' })
       .skip(page * limit)
       .limit(limit)
@@ -15,6 +15,9 @@ class ArticleService {
 
   async count({ filter }: QueryParams) {
     return await Article.find({ $and: filter }).countDocuments()
+  }
+  async countAll() {
+    return await Article.countDocuments()
   }
 
   async findBySlug(slug: string) {
