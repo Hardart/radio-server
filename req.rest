@@ -12,3 +12,8 @@ GET  http://localhost:3068/api/main
 Content-Type: application/json
 
 
+### DECODE_QUERY
+GET  http://localhost:3068/api/test?tags=23&publishDate=2024-02-04
+Content-Type: application/json
+
+

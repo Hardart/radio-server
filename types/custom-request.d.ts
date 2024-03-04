@@ -1,9 +1,14 @@
 import type { Request } from 'express'
-type FilterQuery = { [key: string]: string | string[] }[]
+import { filterKeys } from '../middlewear/test-middlwear'
+
+export type Filter = (typeof filterKeys)[number]
+export type FilterQuery = Partial<Record<Filter, string | Date>>
+export type Sort = 'createdAt' | 'updatedAt'
+export type SortQuery = Partial<Record<Sort, SortOrder>>
 
 export type QueryParams = {
-  sort?: { [key: string]: SortOrder }
-  filter: FilterQuery
+  sort: SortQuery
+  filter: FilterQuery[]
   page: number
   limit: number
 }
