@@ -5,9 +5,9 @@ import type { QueryParams } from '../types/custom-request'
 class ArticleController {
   async all(req: Request, res: Response, next: NextFunction) {
     try {
-      const filterParams = req.body.filterParams as QueryParams
-      const articles = await articleService.all(filterParams)
-      const count = await articleService.count(filterParams)
+      const queryParams = req.body.queryParams as QueryParams
+      const articles = await articleService.all(queryParams)
+      const count = await articleService.count(queryParams)
       res.setHeader('X-Total', count)
       return res.json(articles)
     } catch (error) {

@@ -1,7 +1,7 @@
 import { Response, NextFunction, Request } from 'express'
 import { SortOrder } from 'mongoose'
 import type { QueryParams, Filter, Sort } from '../types/custom-request'
-// const queryKeys = ['tags',]
+
 const BASE_QUERY = {
   limit: 10,
   sort: { createdAt: 'desc' },
@@ -9,7 +9,7 @@ const BASE_QUERY = {
 
 const toNumberKeys = ['page', 'limit'] as const
 export const filterKeys = ['tags', 'publishDate', 'isPublished'] as const
-export function decodeQuery(req: Request, res: Response, _: NextFunction) {
+export function decodeQuery(req: Request, _: Response, next: NextFunction) {
   const query = req.query
   const entries = Object.entries(query) as [string, string][]
 
@@ -52,8 +52,8 @@ export function decodeQuery(req: Request, res: Response, _: NextFunction) {
   if (!queryBundle.filter) queryBundle.filter = [{}]
   if (!queryBundle.limit || isNaN(queryBundle.limit)) queryBundle.limit = BASE_QUERY.limit
   if (!queryBundle.sort) queryBundle.sort = BASE_QUERY.sort
-  console.log(queryBundle)
-  return res.json('ok')
+  req.body.queryParams = queryBundle
+  next()
 }
 
 function isSortOrder(value: any): value is SortOrder {

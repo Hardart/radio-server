@@ -3,8 +3,7 @@ import articleController from '../controllers/article-controller'
 import categoryController from '../controllers/category-controller'
 import pageController from '../controllers/page-controller'
 import trackController from '../controllers/track-controller'
-// import { setFilter } from '../middlewear/query-middlwear.'
-import { decodeQuery } from '../middlewear/test-middlwear'
+import { decodeQuery } from '../middlewear/query-middlwear'
 
 const router = Router()
 
@@ -24,6 +23,5 @@ router.post('/tag', articleController.oneByTag)
 router.get('/news', decodeQuery, articleController.all)
 router.get('/track', trackController.getAll)
 router.post('/history', trackController.getByDate)
-router.get('/test', decodeQuery)
 
 export default router

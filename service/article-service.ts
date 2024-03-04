@@ -4,6 +4,7 @@ import type { QueryParams } from '../types/custom-request'
 
 class ArticleService {
   async all({ filter, sort, limit, page }: QueryParams) {
+    console.log(filter)
     const articles = await Article.find({ $and: filter })
       .select('title slug preview createdAt')
       .populate({ path: 'categoryId', select: 'title slug' })
