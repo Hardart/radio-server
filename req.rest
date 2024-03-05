@@ -1,5 +1,5 @@
 ### NEWS
-GET   http://localhost:3068/api/news
+GET   http://localhost:3068/api/news?tags=звёзды
 Content-Type: application/json
 
 ### CATEGORY
@@ -7,7 +7,7 @@ GET  http://localhost:3068/api/categories
 Content-Type: application/json
 
 ### PAGE_MAIN
-GET  http://localhost:3068/api/main
+GET  http://localhost:3068/api/meta
 Content-Type: application/json
 
 ### DECODE_QUERY

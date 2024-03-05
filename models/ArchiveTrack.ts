@@ -2,7 +2,7 @@ import { Schema, model, InferSchemaType } from 'mongoose'
 
 const ArchiveTrackSchema = new Schema(
   {
-    createdAt: Schema.Types.Date,
+    createdAt: { type: Schema.Types.Date, required: true },
     trackId: { type: Schema.Types.ObjectId, ref: 'Track' },
   },
   { timestamps: false, versionKey: false }

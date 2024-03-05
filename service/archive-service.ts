@@ -8,4 +8,11 @@ export class ArchiveTrackService {
     })
     await track.save()
   }
+
+  async findNewest() {
+    const track = await ArchiveTrack.findOne().select('createdAt')
+    return track?.createdAt.toISOString() || ''
+  }
 }
+
+export const archiveTrackService = new ArchiveTrackService()

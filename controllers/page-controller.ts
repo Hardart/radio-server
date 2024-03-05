@@ -2,6 +2,7 @@ import pageService from '../service/page-service'
 import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
 import tagService from '../service/tag-service'
+import { archiveTrackService } from '../service/archive-service'
 
 class PageController {
   async schedule(_: Request, res: Response, next: NextFunction) {
@@ -15,10 +16,12 @@ class PageController {
   }
 
   async meta(_: Request, res: Response, next: NextFunction) {
+    const archiveCalendar = { start: '', end: new Date().toISOString() }
     try {
       const navList = await pageService.nav()
       const tags = await tagService.all()
-      return res.json({ navList, tags })
+      archiveCalendar.start = await archiveTrackService.findNewest()
+      return res.json({ navList, tags, archiveCalendar })
     } catch (error) {
       next(error)
       return
@@ -37,7 +40,7 @@ class PageController {
 
   async main(req: Request, res: Response, next: NextFunction) {
     try {
-      const query = req.body.filterParams as QueryParams
+      const query = req.body.queryParams as QueryParams
       const data = await pageService.index(query)
       return res.json(data)
     } catch (error) {

@@ -5,17 +5,18 @@ import type { QueryParams, Filter, Sort } from '../types/custom-request'
 const BASE_QUERY = {
   limit: 10,
   sort: { createdAt: 'desc' },
-  filter: [{ publishAt: { $lte: new Date() } }, { isPublished: '1' }],
+  filter: () => [{ publishAt: { $lte: new Date().toISOString() } }, { isPublished: '1' }],
 }
 
 const toNumberKeys = ['page', 'limit'] as const
 export const filterKeys = ['tags', 'isPublished'] as const
+
 export function decodeQuery(req: Request, _: Response, next: NextFunction) {
   const query = req.query
   const entries = Object.entries(query) as [string, string][]
 
   const queryBundle = entries.reduce((acc, [key, value]) => {
-    if (!acc.filter && !Array.isArray(acc.filter)) acc.filter = BASE_QUERY.filter
+    if (!acc.filter && !Array.isArray(acc.filter)) acc.filter = BASE_QUERY.filter()
     toNumberKeys.forEach(setNumberedKeys)
     filterKeys.forEach(setFilterQuery)
     setSortQuery()
@@ -48,10 +49,11 @@ export function decodeQuery(req: Request, _: Response, next: NextFunction) {
   }, {} as QueryParams)
 
   queryBundle.page = !queryBundle.page || isNaN(queryBundle.page) ? 0 : queryBundle.page - 1
-  if (!queryBundle.filter) queryBundle.filter = BASE_QUERY.filter
+  if (!queryBundle.filter) queryBundle.filter = BASE_QUERY.filter()
   if (!queryBundle.limit || isNaN(queryBundle.limit)) queryBundle.limit = BASE_QUERY.limit
   if (!queryBundle.sort) queryBundle.sort = BASE_QUERY.sort
   req.body.queryParams = queryBundle
+  console.log(queryBundle.filter)
   next()
 }
 
