@@ -40,7 +40,6 @@ export function decodeQuery(req: Request, _: Response, next: NextFunction) {
     function setSortQuery() {
       if (key === 'sort') {
         const [sortKey, sortValue] = value.split('_') as [Sort, SortOrder]
-        console.log(sortValue)
         acc.sort = { [sortKey]: isSortOrder(sortValue) ? sortValue : 'desc' }
       }
     }
@@ -53,7 +52,6 @@ export function decodeQuery(req: Request, _: Response, next: NextFunction) {
   if (!queryBundle.limit || isNaN(queryBundle.limit)) queryBundle.limit = BASE_QUERY.limit
   if (!queryBundle.sort) queryBundle.sort = BASE_QUERY.sort
   req.body.queryParams = queryBundle
-  console.log(queryBundle.filter)
   next()
 }
 

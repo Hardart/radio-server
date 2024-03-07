@@ -10,6 +10,7 @@ class ArticleService {
       .skip(page * limit)
       .limit(limit)
       .sort(sort)
+    console.log(articles)
     return articles
   }
 
@@ -33,6 +34,10 @@ class ArticleService {
     await Tag.updateMany(tags, tags, { upsert: true })
     const article = new Article(data)
     return await article.save()
+  }
+
+  async addKey() {
+    await Article.updateMany({}, { publishAt: new Date() })
   }
 }
 

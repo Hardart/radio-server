@@ -6,7 +6,7 @@ const ArticleSchema = new Schema(
     slug: String,
     preview: String,
     content: String,
-    publishAt: { type: Schema.Types.Date, default: new Date() },
+    publishAt: { type: Schema.Types.Date, default: new Date(), required: true },
     isPublished: { type: Boolean, default: false },
     categoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
     tags: [String],

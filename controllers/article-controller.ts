@@ -36,11 +36,22 @@ class ArticleController {
       return
     }
   }
+
   async addOne(req: Request, res: Response, next: NextFunction) {
     try {
       const articleData = req.body
       const article = await articleService.add(articleData)
       return res.json(article)
+    } catch (error) {
+      next(error)
+      return
+    }
+  }
+
+  async addPublishKey(_: Request, res: Response, next: NextFunction) {
+    try {
+      await articleService.addKey()
+      return res.json('article')
     } catch (error) {
       next(error)
       return
