@@ -15,8 +15,6 @@ router.get('/main', decodeQuery, pageController.main)
 router.get('/app', pageController.meta)
 router.get('/team', pageController.hosts)
 router.get('/schedule', pageController.schedule)
-router.get('/newss', pageController.news)
-router.get('/key', articleController.addPublishKey)
 
 router.get('/categories', categoryController.getAll)
 router.get('/article', articleController.one)

@@ -32,7 +32,7 @@ export function decodeQuery(req: Request, _: Response, next: NextFunction) {
           f.isPublished = value
           return f
         })
-      } else {
+      } else if (value) {
         acc.filter.push({ [key]: value })
       }
     }

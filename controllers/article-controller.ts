@@ -47,16 +47,6 @@ class ArticleController {
       return
     }
   }
-
-  async addPublishKey(_: Request, res: Response, next: NextFunction) {
-    try {
-      await articleService.addKey()
-      return res.json('article')
-    } catch (error) {
-      next(error)
-      return
-    }
-  }
 }
 
 export default new ArticleController()
