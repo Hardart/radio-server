@@ -9,5 +9,6 @@ const router = Router()
 
 router.post('/article-add', articleController.addOne)
 router.post('/category-add', categoryController.addOne)
+router.get('/news', articleController.list)
 
 export default router

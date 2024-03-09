@@ -21,7 +21,7 @@ class PageController {
       const navList = await pageService.nav()
       const tags = await tagService.all()
       archiveCalendar.start = await archiveTrackService.findNewest()
-      return res.json({ navList, tags, archiveCalendar })
+      return res.json({ navList, tags, tracks: { archive: { calendar: archiveCalendar } } })
     } catch (error) {
       next(error)
       return

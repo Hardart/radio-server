@@ -3,6 +3,13 @@ import { Tag } from '../models/Tag'
 import type { QueryParams } from '../types/custom-request'
 
 class ArticleService {
+  async list() {
+    const articles = await Article.find()
+      .select('title slug preview createdAt isPublished publishAt')
+      .populate({ path: 'categoryId', select: 'title slug' })
+      .sort({ createdAt: 'desc' })
+    return articles
+  }
   async all({ filter, sort, limit, page }: QueryParams) {
     const articles = await Article.find({ $and: filter })
       .select('title slug preview createdAt')

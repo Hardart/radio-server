@@ -3,6 +3,16 @@ import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
 
 class ArticleController {
+  async list(_: Request, res: Response, next: NextFunction) {
+    try {
+      const articles = await articleService.list()
+      return res.json(articles)
+    } catch (error) {
+      next(error)
+      return
+    }
+  }
+
   async all(req: Request, res: Response, next: NextFunction) {
     try {
       const queryParams = req.body.queryParams as QueryParams
