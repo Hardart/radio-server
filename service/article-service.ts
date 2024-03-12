@@ -3,13 +3,16 @@ import { Tag } from '../models/Tag'
 import type { QueryParams } from '../types/custom-request'
 
 class ArticleService {
-  async list() {
-    const articles = await Article.find()
-      .select('title slug preview createdAt isPublished publishAt')
+  async list({ filter, sort, limit, page }: QueryParams) {
+    const articles = await Article.find({ $and: filter })
+      .select('title slug tags content preview createdAt isPublished publishAt')
       .populate({ path: 'categoryId', select: 'title slug' })
-      .sort({ createdAt: 'desc' })
+      .skip(page * limit)
+      .limit(limit)
+      .sort(sort)
     return articles
   }
+
   async all({ filter, sort, limit, page }: QueryParams) {
     const articles = await Article.find({ $and: filter })
       .select('title slug preview createdAt')
@@ -36,10 +39,8 @@ class ArticleService {
   }
 
   async add(data: Article) {
-    const tags = data.tags.map(tag => ({ title: tag }))
-    await Tag.updateMany(tags, tags, { upsert: true })
-    const article = new Article(data)
-    return await article.save()
+    data.tags.forEach(tag => Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
+    return await Article.updateOne({ slug: data.slug }, data, { upsert: true })
   }
 }
 

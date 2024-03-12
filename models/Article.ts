@@ -19,7 +19,7 @@ ArticleSchema.set('toJSON', {
   virtuals: true,
   transform: function (_, ret) {
     ret.category = ret.categoryId
-    ret.url = `/${ret.category.slug}/${ret.slug}`
+    if (ret.category.slug) ret.url = `/${ret.category.slug}/${ret.slug}`
     delete ret._id
     delete ret.categoryId
   },

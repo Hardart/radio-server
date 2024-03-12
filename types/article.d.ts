@@ -1,4 +1,5 @@
 export type Article = {
+  id: string
   title: string
   slug: string
   content: string
@@ -6,6 +7,8 @@ export type Article = {
   category: string
   createdAt: string
   updatedAt: string
+  publishAt: string
+  isPublished: boolean
 }
 
 export type ArticleQuery = {

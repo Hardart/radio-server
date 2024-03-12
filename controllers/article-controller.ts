@@ -1,12 +1,17 @@
 import articleService from '../service/article-service'
 import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
+import tagService from '../service/tag-service'
+import categoryService from '../service/category-service'
 
 class ArticleController {
-  async list(_: Request, res: Response, next: NextFunction) {
+  async list(req: Request, res: Response, next: NextFunction) {
     try {
-      const articles = await articleService.list()
-      return res.json(articles)
+      const queryParams = req.body.queryParams as QueryParams
+      const tags = await tagService.all()
+      const news = await articleService.list(queryParams)
+      const categories = await categoryService.getAll()
+      return res.json({ news, tags, categories })
     } catch (error) {
       next(error)
       return

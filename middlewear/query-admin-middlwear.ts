@@ -5,7 +5,7 @@ import type { QueryParams, Filter, Sort } from '../types/custom-request'
 const BASE_QUERY = {
   limit: 10,
   sort: { createdAt: 'desc' },
-  filter: () => [{ publishAt: { $lte: new Date().toISOString() } }, { isPublished: '1' }],
+  filter: () => [{}],
 }
 
 const toNumberKeys = ['page', 'limit'] as const
@@ -27,14 +27,7 @@ export function decodeQuery(req: Request, _: Response, next: NextFunction) {
 
     function setFilterQuery(item: Filter) {
       if (item !== key) return
-      if (key === 'isPublished') {
-        acc.filter = acc.filter.map(f => {
-          f.isPublished = value
-          return f
-        })
-      } else if (value) {
-        acc.filter.push({ [key]: value })
-      }
+      acc.filter.push({ [key]: value })
     }
 
     function setSortQuery() {
