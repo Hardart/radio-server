@@ -6,6 +6,7 @@ import { onConnection } from './service/socket-service'
 import mongoose from 'mongoose'
 import router from './router'
 import adminRoutes from './router/admin'
+import ErrorService from './service/error-service'
 dotenv.config({ path: __dirname + '/.env' })
 const app = express()
 
@@ -30,7 +31,7 @@ async function startServer() {
     console.log('====================================')
     console.log(`БД подключена`)
   } catch (error) {
-    console.log(error)
+    ErrorService.append(error)
   }
   httpServer.listen(PORT, () => {
     console.log('====================================')

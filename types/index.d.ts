@@ -10,6 +10,11 @@ export interface ItunesSong {
   previewUrl: string
 }
 
+export interface ItunesTrackMeta {
+  cover: string
+  preview: string
+}
+
 export interface ITrackMetadata {
   artistName: string
   trackTitle: string

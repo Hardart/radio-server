@@ -7,9 +7,6 @@ import { decodeQuery } from '../middlewear/query-middlwear'
 
 const router = Router()
 
-// router.post('/registration', body('email').isEmail(), body('password').isLength({ min: 3, max: 32 }), userController.registration)
-// router.post('/login', body('email').isEmail(), body('password').isLength({ min: 3, max: 32 }), userController.login)
-
 router.get('/meta', pageController.meta)
 router.get('/main', decodeQuery, pageController.main)
 router.get('/app', pageController.meta)

@@ -50,6 +50,7 @@ const team = [
     image: '/images/team/08.webp',
   },
 ]
+
 const mainMenu = [
   {
     slug: '',

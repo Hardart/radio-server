@@ -5,6 +5,7 @@ import { CacheService } from './cache-service'
 import { TrackService } from './track-service'
 import { ArchiveTrackService } from './archive-service'
 import { Itunes } from './iTunes-service'
+import { ItunesTrackMeta } from '../types'
 
 const simpleMeta = {
   artistName: 'Радио Штаны',
@@ -56,21 +57,24 @@ export class IcecastService {
 
   private async saveMetadata(searchTerm: string) {
     const { artistName, trackTitle } = CacheService.metaData
-    try {
-      const track = await TrackService.findOne(artistName, trackTitle)
-      if (track) {
-        ArchiveTrackService.save(track.id)
-        CacheService.saveCovers(track.cover || '')
-      } else {
-        const { cover, preview } = await Itunes.searchOneTrack(searchTerm)
-        CacheService.saveCovers(cover)
-        const id = await TrackService.save({ artistName, trackTitle, cover, preview })
-        ArchiveTrackService.save(id)
-      }
-    } catch (error) {
-      CacheService.saveCovers(simpleMeta.cover)
-      const id = await TrackService.save({ artistName, trackTitle, cover: simpleMeta.cover, preview: '' })
-      ArchiveTrackService.save(id)
+    const track = await TrackService.findOne(artistName, trackTitle)
+    if (track) {
+      ArchiveTrackService.save(track.id)
+      CacheService.saveCovers(track.cover || '')
+    } else {
+      const trackMeta = await Itunes.searchOneTrack(searchTerm)
+      this.saveTrackData(artistName, trackTitle, trackMeta)
     }
+  }
+
+  private async saveTrackData(artistName: string, trackTitle: string, trackMeta: ItunesTrackMeta | null) {
+    CacheService.saveCovers(trackMeta?.cover || simpleMeta.cover)
+    const id = await TrackService.save({
+      artistName,
+      trackTitle,
+      cover: trackMeta?.cover || simpleMeta.cover,
+      preview: trackMeta?.preview || '',
+    })
+    if (id) ArchiveTrackService.save(id)
   }
 }

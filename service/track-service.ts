@@ -1,17 +1,27 @@
 import { ArchiveTrack } from '../models/ArchiveTrack'
 import { Track } from '../models/Track'
 import { ITrackMetadata } from '../types'
+import ErrorService from './error-service'
 
 export class TrackService {
   static async findOne(artistName: string, trackTitle: string) {
-    const track = await Track.findOneAndUpdate({ artistName, trackTitle }, { artistName, trackTitle })
-    return track
+    try {
+      return await Track.findOneAndUpdate({ artistName, trackTitle }, { artistName, trackTitle })
+    } catch (error) {
+      ErrorService.append(error)
+      return null
+    }
   }
 
   static async save(trackData: ITrackMetadata) {
     const track = new Track(trackData)
-    const { id } = await track.save()
-    return id
+    try {
+      const { id } = await track.save()
+      return id
+    } catch (error) {
+      ErrorService.append(error)
+      return null
+    }
   }
 
   async list(limit: number) {
