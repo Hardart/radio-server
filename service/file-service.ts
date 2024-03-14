@@ -1,8 +1,6 @@
 import fs from 'fs'
 import ErrorService from './error-service'
-// let src = ''
 
-// const data = []
 class FileService {
   readImages(src?: string) {
     try {
@@ -23,5 +21,4 @@ function foldersMap(path: string): string[] {
     const fullPath = path + f
     return fullPath.replace('./assets', '')
   })
-  // .filter(item => !item.includes('.DS_Store'))
 }

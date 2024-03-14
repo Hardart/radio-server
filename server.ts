@@ -6,6 +6,7 @@ import { createServer } from 'http'
 // import mongoose from 'mongoose'
 import router from './router'
 import adminRoutes from './router/admin'
+import filesRoutes from './router/files'
 // import ErrorService from './service/error-service'
 dotenv.config({ path: __dirname + '/.env' })
 const app = express()
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('assets'))
 app.use('/api', router)
 app.use('/admin', adminRoutes)
+app.use('/uploads', filesRoutes)
 
 startServer()
 
