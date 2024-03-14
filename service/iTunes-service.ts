@@ -8,11 +8,13 @@ export class Itunes {
     this.term = searchTerm
     const data = await this.fetchTrack()
     if (!data) return null
+    if (data.resultCount == 0) return null
     const { artworkUrl60, previewUrl } = data.results[0]
     return { cover: artworkUrl60, preview: previewUrl }
   }
 
   private static async fetchTrack() {
+    console.log('search: ' + this.searchParams)
     try {
       const response = await fetch(`https://itunes.apple.com/search?${this.searchParams}`)
       return (await response.json()) as ItunesResponse

@@ -19,6 +19,6 @@ router.post('/tag', articleController.oneByTag)
 router.get('/news', decodeQuery, articleController.all)
 router.get('/track', trackController.getAll)
 router.post('/history', trackController.getByDate)
-router.get('/test', decodeQuery)
+router.get('/files', pageController.files)
 
 export default router

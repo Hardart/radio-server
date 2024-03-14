@@ -14,4 +14,8 @@ Content-Type: application/json
 GET  http://localhost:3068/api/test?tags=23
 Content-Type: application/json
 
+### FILES_ROUTE
+GET  http://localhost:3068/api/files?src=images/news
+Content-Type: application/json
+
 

@@ -3,6 +3,7 @@ import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
 import tagService from '../service/tag-service'
 import { archiveTrackService } from '../service/archive-service'
+import fileService from '../service/file-service'
 
 class PageController {
   async schedule(_: Request, res: Response, next: NextFunction) {
@@ -53,6 +54,17 @@ class PageController {
     try {
       const tags = await tagService.all()
       return res.json({ tags })
+    } catch (error) {
+      next(error)
+      return
+    }
+  }
+
+  async files(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { src } = req.query as Record<string, string>
+      const data = fileService.readImages(src)
+      return res.json(data)
     } catch (error) {
       next(error)
       return
