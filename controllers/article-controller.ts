@@ -11,6 +11,8 @@ class ArticleController {
       const tags = await tagService.all()
       const news = await articleService.list(queryParams)
       const categories = await categoryService.getAll()
+      const count = await articleService.count(queryParams)
+      res.setHeader('X-Total', count)
       return res.json({ news, tags, categories })
     } catch (error) {
       next(error)
