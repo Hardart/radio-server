@@ -2,8 +2,8 @@
 GET   http://localhost:3068/api/news
 Content-Type: application/json
 
-### CATEGORY
-GET  http://localhost:3068/api/categories
+### TRACKS
+GET  http://localhost:3068/api/tracks
 Content-Type: application/json
 
 ### PAGE_MAIN

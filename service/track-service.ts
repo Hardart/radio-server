@@ -28,6 +28,14 @@ export class TrackService {
     return await Track.find().limit(limit).sort('updatedAt')
   }
 
+  async all() {
+    return await Track.find().select('-updatedAt').sort('updatedAt')
+  }
+
+  async count() {
+    return await Track.find().countDocuments()
+  }
+
   async history(date: string) {
     const fromTime = new Date(date)
     const toTime = new Date(Date.parse(date) + 3 * 3600 * 1000)

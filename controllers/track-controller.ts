@@ -2,9 +2,16 @@ import type { Response, Request } from 'express'
 import trackService from '../service/track-service'
 
 class TrackController {
-  async getAll(req: Request, res: Response) {
+  async list(req: Request, res: Response) {
     const { limit } = req.query
     const tracks = await trackService.list(Number(limit))
+    return res.json(tracks)
+  }
+
+  async all(req: Request, res: Response) {
+    const tracks = await trackService.all()
+    const count = await trackService.count()
+    res.setHeader('X-Total', count)
     return res.json(tracks)
   }
 

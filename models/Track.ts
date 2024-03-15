@@ -12,6 +12,7 @@ const TrackSchema = new Schema(
 
 TrackSchema.set('toJSON', {
   versionKey: false,
+  virtuals: true,
   transform: function (_, ret) {
     delete ret._id
   },
