@@ -6,6 +6,7 @@ import { TrackService } from './track-service'
 import { ArchiveTrackService } from './archive-service'
 import { Itunes } from './iTunes-service'
 import { ItunesTrackMeta } from '../types'
+import ErrorService from './error-service'
 
 const simpleMeta = {
   artistName: 'Радио Штаны',
@@ -41,6 +42,7 @@ export class IcecastService {
   private async onMetadata(metadata: Map<string, string>) {
     const streamTitle = metadata.get('StreamTitle')
     if (this.trackTitle === streamTitle) return
+    ErrorService.saveStream(streamTitle)
     if (!streamTitle) return this.io ? this.io.emit('radio:jingle', simpleMeta) : undefined
     this.trackTitle = streamTitle
     const { searchTerm, artistName, trackTitle } = MetadataService.parseTrackName(streamTitle)
@@ -59,11 +61,11 @@ export class IcecastService {
     const { artistName, trackTitle } = CacheService.metaData
     const track = await TrackService.findOne(artistName, trackTitle)
     if (track) {
-      ArchiveTrackService.save(track.id)
+      await ArchiveTrackService.save(track.id)
       CacheService.saveCovers(track.cover || '')
     } else {
       const trackMeta = await Itunes.searchOneTrack(searchTerm)
-      this.saveTrackData(artistName, trackTitle, trackMeta)
+      await this.saveTrackData(artistName, trackTitle, trackMeta)
     }
   }
 

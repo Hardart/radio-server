@@ -6,7 +6,7 @@ import ErrorService from './error-service'
 export class TrackService {
   static async findOne(artistName: string, trackTitle: string) {
     try {
-      return await Track.findOneAndUpdate({ artistName, trackTitle }, { artistName, trackTitle })
+      return await Track.findOne({ artistName, trackTitle })
     } catch (error) {
       ErrorService.append(error)
       return null
