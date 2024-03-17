@@ -4,7 +4,7 @@ const ArticleSchema = new Schema(
   {
     title: String,
     slug: String,
-    preview: String,
+    image: String,
     content: String,
     publishAt: { type: Schema.Types.Date, default: new Date(), required: true },
     isPublished: { type: Boolean, default: false },
@@ -26,4 +26,5 @@ ArticleSchema.set('toJSON', {
 })
 
 export type Article = InferSchemaType<typeof ArticleSchema>
+export type ArticleWithID = Article & { id: string }
 export const Article = model('Article', ArticleSchema)

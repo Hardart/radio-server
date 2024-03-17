@@ -21,4 +21,5 @@ CategorySchema.set('toJSON', {
 })
 
 export type Category = InferSchemaType<typeof CategorySchema>
+export type CategoryWithID = Category & { id: string }
 export const Category = model('Category', CategorySchema)

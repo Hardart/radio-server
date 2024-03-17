@@ -29,7 +29,7 @@ export class TrackService {
   }
 
   async all() {
-    return await Track.find().select('-updatedAt').sort('updatedAt')
+    return await Track.find().select('-updatedAt -preview').sort({ createdAt: 'desc' })
   }
 
   async count() {

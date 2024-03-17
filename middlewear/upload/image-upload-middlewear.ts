@@ -5,9 +5,9 @@ import crypto from 'crypto'
 const getExtension = (fileSrc: string) => fileSrc.replace(/.+\./, '')
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    const folderId = crypto.randomBytes(8).toString('hex')
-    const imageId = crypto.randomBytes(8).toString('hex')
     const folderName = file.fieldname
+    const folderId = new Date().toLocaleDateString().replace(/\./g, '')
+    const imageId = crypto.randomBytes(8).toString('hex')
     const ext = getExtension(file.originalname)
     const fileName = `${imageId}.${ext}`
     const dest = `./assets/images/${folderName}/${folderId}`

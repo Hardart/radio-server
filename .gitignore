@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+req.rest
 
 # Node dependencies
 node_modules
@@ -13,6 +14,7 @@ public/images
 # Logs
 logs
 *.log
+
 
 # Misc
 .DS_Store

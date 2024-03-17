@@ -6,4 +6,5 @@ import { resizeImage } from '../middlewear/upload/image-resize-middlewear'
 const router = Router()
 router.post('/image', imageUploadMiddlewear.single('avatar'), resizeImage, filesController.uploadTest)
 router.post('/image/gallery', imageUploadMiddlewear.single('gallery'), resizeImage, filesController.uploadTest)
+router.post('/image/news', imageUploadMiddlewear.single('news'), resizeImage, filesController.uploadTest)
 export default router

@@ -18,4 +18,8 @@ Content-Type: application/json
 GET  http://localhost:3068/api/files
 Content-Type: application/json
 
+### BY_ID
+GET  http://localhost:3068/admin/article?id=65f58328303d2ffa04ee583b
+Content-Type: application/json
+
 

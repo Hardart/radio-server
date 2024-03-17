@@ -2,7 +2,7 @@ import type { Request } from 'express'
 import { filterKeys } from '../middlewear/query-middlwear'
 
 export type Filter = (typeof filterKeys)[number]
-export type FilterQuery = Partial<Record<Filter, string>>
+export type FilterQuery = Partial<Record<Filter, string | string[]>>
 export type Sort = 'createdAt' | 'updatedAt'
 export type SortQuery = Partial<Record<Sort, SortOrder>>
 
