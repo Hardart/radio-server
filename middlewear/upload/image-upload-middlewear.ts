@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
     const dest = `./assets/images/${folderName}/${folderId}`
     fs.mkdirSync(dest, { recursive: true })
     file.filename = fileName
+
     cb(null, dest)
   },
 

@@ -1,10 +1,9 @@
 import articleService from '../service/article-service'
 import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
-// import tagService from '../service/tag-service'
 
 class ArticleController {
-  async list(req: Request, res: Response, next: NextFunction) {
+  async list(_: Request, res: Response, next: NextFunction) {
     try {
       const news = await articleService.list()
       return res.json(news)

@@ -4,6 +4,7 @@ import categoryController from '../controllers/category-controller'
 import pageController from '../controllers/page-controller'
 import trackController from '../controllers/track-controller'
 import { decodeQuery } from '../middlewear/query-middlwear'
+import tagController from '../controllers/tag-controller'
 
 const router = Router()
 
@@ -15,6 +16,7 @@ router.get('/schedule', pageController.schedule)
 
 router.get('/categories', categoryController.getAll)
 router.get('/article', articleController.one)
+router.get('/tags', tagController.list)
 router.post('/tag', articleController.oneByTag)
 router.get('/news', decodeQuery, articleController.all)
 router.get('/track', trackController.list)

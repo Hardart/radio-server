@@ -20,7 +20,7 @@ class PageController {
     const archiveCalendar = { start: '', end: new Date().toISOString() }
     try {
       const navList = await pageService.nav()
-      const tags = await tagService.all()
+      const tags = await tagService.list()
       archiveCalendar.start = await archiveTrackService.findNewest()
       return res.json({ navList, tags, tracks: { archive: { calendar: archiveCalendar } } })
     } catch (error) {
@@ -52,7 +52,7 @@ class PageController {
 
   async news(_: Request, res: Response, next: NextFunction) {
     try {
-      const tags = await tagService.all()
+      const tags = await tagService.list()
       return res.json({ tags })
     } catch (error) {
       next(error)
