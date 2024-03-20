@@ -1,34 +1,30 @@
 import sharp from 'sharp'
 import { Response, NextFunction, Request } from 'express'
-const sizes = [150, 300, 450, 700, 1200] as const
+// const sizes = [150, 300, 450, 700, 1200] as const
 export async function resizeImage(req: Request, res: Response, next: NextFunction) {
+  if (!req.file) return next()
   const file = req.file
-  if (!file) return next()
+  const pathToOriginalFile = file.path
 
-  const path = file.path
-  let filePath = ''
+  await sharp(pathToOriginalFile).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 'orig'))
+  const pathToNewFile = `./${toPath(pathToOriginalFile, 'orig')}`
+  sharp(pathToNewFile).resize({ width: 200 }).webp({ quality: 85 }).toFile(toPath(pathToOriginalFile, 'preview'))
+
   switch (file.fieldname) {
     case 'avatar':
-      sizes.forEach(async size => {
-        sharp(path).resize({ width: size }).webp({ quality: 85 }).toFile(toPath(path, size))
-      })
-      await sharp(path).resize({ width: 75 }).webp({ quality: 85 }).toFile(toPath(path, 75))
-      req.file!.path = toPath(path, 75)
+      await sharp(pathToNewFile).resize({ width: 75 }).webp({ quality: 85 }).toFile(toPath(pathToOriginalFile, 75))
+      req.file.path = toPath(pathToOriginalFile, 75)
       break
     case 'gallery':
-      await sharp(path).resize({ width: 1530, height: 420 }).webp({ quality: 90 }).toFile(toPath(path, 1500))
+      await sharp(pathToNewFile).resize({ width: 1530, height: 420 }).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 1500))
       break
     case 'news':
-      sharp(path).resize({ width: 600, height: 360 }).webp({ quality: 90 }).toFile(toPath(path, '_600'))
-      filePath = toPath(path, '_orig')
-      await sharp(path).webp({ quality: 90 }).toFile(filePath)
-      req.file!.path = filePath
+      sharp(pathToNewFile).resize({ width: 600, height: 360 }).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 600))
+      req.file.path = toPath(pathToOriginalFile, 'orig')
       break
   }
-
-  sharp(path).resize({ width: 200 }).webp({ quality: 85 }).toFile(toPath(path, '_preview'))
 
   next()
 }
 
-const toPath = (path: string, size: number | string = '') => path.replace(/\.([^.\\/:*?"<>|\r\n]+)$/, `${size}.webp`)
+const toPath = (path: string, size: number | string = '') => path.replace(/\.([^.\\/:*?"<>|\r\n]+)$/, `_${size}.webp`)

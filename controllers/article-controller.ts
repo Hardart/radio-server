@@ -9,7 +9,6 @@ class ArticleController {
       return res.json(news)
     } catch (error) {
       next(error)
-      return
     }
   }
 
@@ -22,7 +21,6 @@ class ArticleController {
       return res.json(articles)
     } catch (error) {
       next(error)
-      return
     }
   }
 
@@ -33,7 +31,6 @@ class ArticleController {
       return res.json(articles)
     } catch (error) {
       next(error)
-      return
     }
   }
 
@@ -43,7 +40,6 @@ class ArticleController {
       return res.json(articles)
     } catch (error) {
       next(error)
-      return
     }
   }
 
@@ -54,7 +50,6 @@ class ArticleController {
       return res.json(article)
     } catch (error) {
       next(error)
-      return
     }
   }
 
@@ -65,7 +60,6 @@ class ArticleController {
       return res.json(article)
     } catch (error) {
       next(error)
-      return
     }
   }
 
@@ -76,7 +70,16 @@ class ArticleController {
       return res.json(article)
     } catch (error) {
       next(error)
-      return
+    }
+  }
+
+  async deleteOne(req: Request, res: Response, next: any) {
+    try {
+      const { id } = req.body
+      const cat = await articleService.deleteOne(id)
+      return res.json(cat)
+    } catch (error) {
+      next(error)
     }
   }
 }

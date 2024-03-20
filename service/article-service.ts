@@ -44,13 +44,18 @@ class ArticleService {
   }
 
   async add(data: Article) {
-    data.tags.forEach(tag => Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
+    data.tags.forEach(async tag => await Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
     const article = new Article(data)
-    return await article.save()
+    await article.save()
   }
 
   async updateOne(data: ArticleWithID) {
+    data.tags.forEach(async tag => await Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
     return await Article.findByIdAndUpdate(data.id, data, { new: true }).populate('categoryId')
+  }
+
+  async deleteOne(id: string) {
+    return await Article.findByIdAndDelete(id)
   }
 }
 

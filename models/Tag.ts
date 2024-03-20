@@ -3,9 +3,8 @@ import { Schema, model, InferSchemaType } from 'mongoose'
 const TagSchema = new Schema(
   {
     title: String,
-    articles: [{ type: Schema.Types.ObjectId, ref: 'Article' }],
   },
-  { timestamps: true, versionKey: false, toObject: { virtuals: true } }
+  { timestamps: false, versionKey: false, toObject: { virtuals: true } }
 )
 
 TagSchema.set('toJSON', {
@@ -13,7 +12,6 @@ TagSchema.set('toJSON', {
   transform: function (_, ret) {
     delete ret._id
     delete ret.__v
-    ret.name = ret.title
   },
 })
 

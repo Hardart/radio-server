@@ -1,4 +1,6 @@
-import { Schema, model, InferSchemaType } from 'mongoose'
+import { Schema, model, InferSchemaType, MongooseError, MongooseDocumentMiddleware } from 'mongoose'
+import ErrorApi from '../handlers/error-api'
+// import ErrorApi from '../handlers/error-api'
 
 const ArticleSchema = new Schema(
   {
@@ -23,6 +25,14 @@ ArticleSchema.set('toJSON', {
     delete ret._id
     delete ret.categoryId
   },
+})
+
+ArticleSchema.post('save', function (error: MongooseError, _: MongooseDocumentMiddleware, next: any) {
+  if (error.name === 'MongoServerError') {
+    next(ErrorApi.articleExist())
+  } else {
+    next()
+  }
 })
 
 export type Article = InferSchemaType<typeof ArticleSchema>

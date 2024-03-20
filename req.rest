@@ -11,15 +11,19 @@ GET  http://localhost:3068/api/meta
 Content-Type: application/json
 
 ### DECODE_QUERY
-GET  http://localhost:3068/api/test?tags=23
+GET  http://localhost:3068/apis/test?tags=23
 Content-Type: application/json
 
 ### FILES_ROUTE
-GET  http://localhost:3068/api/tags
+POST  http://localhost:3068/uploads/image/delete
 Content-Type: application/json
 
+{
+  "path": "/images/avatar/20032024/9b78f36c36785c14_preview.webp"
+}
+
 ### BY_ID
-GET  http://localhost:3068/admin/article?id=65f58328303d2ffa04ee583b
+GET  http://localhost:3068/admin/article?id=65f58328303d2ffa04ee583bd
 Content-Type: application/json
 
 

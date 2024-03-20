@@ -3,7 +3,7 @@ import { SortOrder } from 'mongoose'
 import type { QueryParams, Filter, Sort } from '../types/custom-request'
 
 const BASE_QUERY = {
-  limit: 10,
+  limit: 12,
   sort: { createdAt: 'desc' },
   filter: () => [{ publishAt: { $lte: new Date().toISOString() } }, { isPublished: '1' }],
 }
