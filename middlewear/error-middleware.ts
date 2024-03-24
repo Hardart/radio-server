@@ -3,7 +3,7 @@ import ErrorApi from '../handlers/error-api'
 
 export const ErrorHandler: ErrorRequestHandler = (err: Error | ErrorApi, req: Request, res: Response, next: NextFunction) => {
   if ('custom' in err) {
-    res.status(400).json({ message: err.message })
+    res.status(err.statusCode).json({ message: err.message })
     return
   }
 
