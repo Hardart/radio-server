@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType, MongooseError, MongooseDocumentMiddleware } from 'mongoose'
+import { Schema, model, InferSchemaType, MongooseDocumentMiddleware } from 'mongoose'
 import ErrorApi from '../handlers/error-api'
 // import ErrorApi from '../handlers/error-api'
 
@@ -27,9 +27,9 @@ ArticleSchema.set('toJSON', {
   },
 })
 
-ArticleSchema.post('save', function (error: MongooseError, _: MongooseDocumentMiddleware, next: any) {
+ArticleSchema.post('save', function (error: NodeJS.ErrnoException, _: MongooseDocumentMiddleware, next: any) {
   if (error.name === 'MongoServerError') {
-    next(ErrorApi.articleExist())
+    next(ErrorApi.custom(error.code))
   } else {
     next()
   }

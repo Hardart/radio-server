@@ -188,7 +188,7 @@ class PageService {
 
   async index(query: QueryParams) {
     const pageData = {
-      news: await articleService.all(query),
+      news: await articleService.list(query),
       hosts: await this.hosts(),
     }
     return pageData

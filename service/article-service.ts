@@ -4,14 +4,14 @@ import { Tag } from '../models/Tag'
 import type { QueryParams } from '../types/custom-request'
 
 class ArticleService {
-  async list() {
+  async all() {
     const articles = await Article.find()
       .select('title slug tags  createdAt isPublished publishAt')
       .populate({ path: 'categoryId', select: 'title slug' })
     return articles
   }
 
-  async all({ filter, sort, limit, page }: QueryParams) {
+  async list({ filter, sort, limit, page }: QueryParams) {
     const cats = await Category.find({ isPublished: true })
 
     const articles = await Article.find({ $and: [...filter, { categoryId: { $in: cats } }] })

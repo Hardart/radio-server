@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Token } from '../models/TokenModel'
 import ErrorApi from '../handlers/error-api'
-import { UserFormData } from '../types/user'
 import { User } from '../models/UserModel'
 
 class TokenService {
@@ -9,7 +8,7 @@ class TokenService {
     const access = process.env.ACCESS_TOKEN
     const refresh = process.env.REFRESH_TOKEN
     if (!access || !refresh) throw ErrorApi.NoEnvVariable('access or refresh')
-    const accessToken = jwt.sign(payload, access, { expiresIn: '1m' })
+    const accessToken = jwt.sign(payload, access, { expiresIn: '1m', algorithm: 'HS512', noTimestamp: true })
     const refreshToken = jwt.sign(payload, refresh, { expiresIn: '1d' })
     return {
       accessToken,
@@ -40,7 +39,7 @@ class TokenService {
   validateAccessToken(token: string) {
     try {
       const acces = process.env.ACCESS_TOKEN as string
-      const userData = jwt.verify(token, acces) as UserFormData & { id: string }
+      const userData = jwt.verify(token, acces) as User & { id: string }
       return userData
     } catch (error) {
       return null

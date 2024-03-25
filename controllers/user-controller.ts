@@ -1,5 +1,4 @@
 import type { Response, Request, NextFunction } from 'express'
-import type { UserFormData } from '../types/user'
 import userService from '../service/user-service'
 import ErrorApi from '../handlers/error-api'
 
@@ -8,10 +7,9 @@ class UserController {
     try {
       // const validErrors = validationResult(req)
       // if (!validErrors.isEmpty()) return next(ErrorApi.BadRequest('Ошибка при валидации', validErrors.array()))
-      const { email, password, name } = req.body as UserFormData
-      console.log(email)
-      const { accessToken } = await userService.registration({ email, password, name })
-      // res.cookie('refreshToken', refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+      const userData = req.body
+      const { accessToken } = await userService.registration(userData)
+      // res.cookie('refreshToken', refreshToken, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true })
       return res.status(200).json({ accessToken })
     } catch (error) {
       next(error)
@@ -22,9 +20,11 @@ class UserController {
     try {
       // const validErrors = validationResult(req)
       // if (!validErrors.isEmpty()) return next(ErrorApi.BadRequest('Ошибка при валидации', validErrors.array()))
-      const { email, password } = req.body
-      const { accessToken, refreshToken } = await userService.login({ email, password })
-      res.cookie('refreshToken', refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+      const maxAge = 1000 * 60 * 60 * 24 * 30 // 30 дней
+      const userData = req.body
+
+      const { accessToken, refreshToken } = await userService.login(userData)
+      res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true })
       return res.status(200).json({ accessToken, refreshToken })
     } catch (error) {
       next(error)
@@ -43,10 +43,11 @@ class UserController {
 
   async refresh(req: Request, res: Response, next: NextFunction) {
     try {
-      const { refreshToken } = req.cookies
-      const tokenData = await userService.refresh(refreshToken)
-      res.cookie('refreshToken', tokenData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-      return res.status(200).json({ accessToken: tokenData.accessToken, refreshToken: tokenData.refreshToken })
+      const { refreshToken: oldToken } = req.cookies
+      const { accessToken, refreshToken } = await userService.refresh(oldToken)
+      const maxAge = 1000 * 60 * 60 * 24 * 30 // 30 дней
+      res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true })
+      return res.status(200).json({ accessToken, refreshToken })
     } catch (error) {
       next(error)
     }
@@ -61,11 +62,22 @@ class UserController {
     }
   }
 
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userData = req.body
+      const { accessToken, refreshToken } = await userService.updateOne(userData)
+      const maxAge = 1000 * 60 * 60 * 24 * 30 // 30 дней
+      res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true })
+      return res.json({ accessToken })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async check(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('REQUEST TO CHECK')
       if (!req.body?.user) return next(ErrorApi.UnathorizedError())
-      return res.status(200).json({ user: req.body.user })
+      return res.status(200).json({ check: 'ok' })
     } catch (error) {
       next(error)
     }

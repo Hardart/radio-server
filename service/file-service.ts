@@ -25,6 +25,6 @@ function foldersMap(path: string): string[] {
     .filter(path => {
       if (path.match(/\.(jpe?g|png|webp|avif)$/)) {
         return path.includes('_preview') ? path : undefined
-      } else return path
+      } else return !path.includes('.DS')
     })
 }

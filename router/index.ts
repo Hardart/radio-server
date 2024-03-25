@@ -18,10 +18,9 @@ router.get('/categories', categoryController.getAll)
 router.get('/article', articleController.one)
 router.get('/tags', tagController.list)
 router.post('/tag', articleController.oneByTag)
-router.get('/news', decodeQuery, articleController.all)
+router.get('/news', decodeQuery, articleController.list)
 router.get('/track', trackController.list)
 router.get('/tracks', trackController.all)
 router.post('/history', trackController.getByDate)
-router.get('/files', pageController.files)
 
 export default router

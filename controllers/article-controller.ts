@@ -3,19 +3,19 @@ import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
 
 class ArticleController {
-  async list(_: Request, res: Response, next: NextFunction) {
+  async all(_: Request, res: Response, next: NextFunction) {
     try {
-      const news = await articleService.list()
+      const news = await articleService.all()
       return res.json(news)
     } catch (error) {
       next(error)
     }
   }
 
-  async all(req: Request, res: Response, next: NextFunction) {
+  async list(req: Request, res: Response, next: NextFunction) {
     try {
       const queryParams = req.body.queryParams as QueryParams
-      const articles = await articleService.all(queryParams)
+      const articles = await articleService.list(queryParams)
       const count = await articleService.count(queryParams)
       res.setHeader('X-Total', count)
       return res.json(articles)
