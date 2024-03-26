@@ -2,7 +2,6 @@ import { Schema, model, InferSchemaType } from 'mongoose'
 
 const ProgramSchema = new Schema(
   {
-    dayId: { type: Number, required: true },
     title: { type: String, required: true },
     description: String,
     image: String,

@@ -1,19 +1,21 @@
-### REGISTRATION
-POST  http://localhost:3068/admin/registration
+### HOSTS
+GET http://localhost:3068/admin/host
+Content-Type: application/json
+
+### HOST-ADD
+POST http://localhost:3068/admin/host-add
 Content-Type: application/json
 
 {
-   "email": "hardart@bk.ru",
-   "password": "12345",
-   "name": "Артем",
-   "roles": ["hero"]
+   "firstName": "Евгений",
+   "secondName": "Ларин"
 }
 
-### LOGIN
-POST  http://localhost:3068/admin/login
+### HOST-UPDATE
+POST http://localhost:3068/admin/host-update
 Content-Type: application/json
 
 {
-   "email": "hardart@bk.ru",
-   "password": "12345"
+   "id": "66032df2183e3929432fd954",
+   "avatar": "http://localhost:3068/images/avatar/26032024/183391c5f95349a2_orig.webp"
 }

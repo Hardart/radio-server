@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import { Response, NextFunction, Request } from 'express'
-// const sizes = [150, 300, 450, 700, 1200] as const
+
 export async function resizeImage(req: Request, res: Response, next: NextFunction) {
   if (!req.file) return next()
   const file = req.file
