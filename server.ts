@@ -1,50 +1,21 @@
-import * as dotenv from 'dotenv'
-import express from 'express'
-import { createServer } from 'http'
-import { Server } from 'socket.io'
-import { onConnection } from './service/socket-service'
-import mongoose from 'mongoose'
-import router from './router'
-import adminRoutes from './router/admin'
-import filesRoutes from './router/files'
+import { Parser } from 'icecast-parser'
 import ErrorService from './service/error-service'
-import { ErrorHandler } from './middlewear/error-middleware'
-import cors from 'cors'
-import cookerParser from 'cookie-parser'
-dotenv.config({ path: __dirname + '/.env' })
-const app = express()
 
-const PORT = process.env.PORT || 3068
-const httpServer = createServer(app)
-const io = new Server(httpServer, {
-  cors: { allowedHeaders: '*', credentials: true },
+const radioStation = new Parser({
+  url: 'https://stream.lolamedia.ru/rsh_federal',
+  emptyInterval: 4,
+  errorInterval: 5,
+  metadataInterval: 5,
+  userAgent: 'HDRT_Parser',
 })
-
-app.use(express.json())
-app.use(express.static('assets'))
-app.use(cookerParser())
-app.use(cors({ credentials: true }))
-app.use('/api', router)
-app.use('/uploads', filesRoutes)
-app.use('/admin', adminRoutes)
-
-app.use(ErrorHandler)
-
-startServer()
-
-io.on('connection', onConnection(io))
-
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.DB_URL_LOCAL || '')
-    console.log('====================================')
-    console.log(`БД подключена`)
-  } catch (error) {
-    ErrorService.append(error)
+radioStation.on('metadata', onMetadata)
+radioStation.on('error', console.log)
+radioStation.on('empty', console.log)
+let title: string | undefined = ''
+function onMetadata(metadata: Map<string, string>) {
+  const streamTitle = metadata.get('StreamTitle')
+  if (title !== streamTitle) {
+    title = streamTitle
+    ErrorService.saveStream(title)
   }
-  app.listen(PORT, () => {
-    console.log('====================================')
-    console.log(`Сервер запущен, порт: ${PORT}`)
-    console.log('====================================')
-  })
 }
