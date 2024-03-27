@@ -5,16 +5,26 @@ export default class ErrorService {
       new Date()
     )
   }
-  static append(error: unknown) {
+
+  static addError(error: unknown) {
     try {
       fs.appendFileSync('./logs/errors.txt', `${this.dateAndTime}: ${error}\n`, { encoding: 'utf-8' })
     } catch (error) {
       console.log(error)
     }
   }
+
   static saveStream(streamTitle?: string) {
     try {
       fs.appendFileSync('./logs/stream.txt', `${this.dateAndTime}: ${streamTitle}\n`, { encoding: 'utf-8' })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static saveEmpty(streamTitle?: string) {
+    try {
+      fs.appendFileSync('./logs/empty.txt', `${this.dateAndTime}: Empty data ${streamTitle}\n`, { encoding: 'utf-8' })
     } catch (error) {
       console.log(error)
     }
