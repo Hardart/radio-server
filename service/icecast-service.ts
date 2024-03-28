@@ -54,7 +54,7 @@ export class IcecastService {
   }
 
   private onEmpty() {
-    console.log('empty meta')
+    // console.log('empty meta')
   }
 
   private async saveMetadata(searchTerm: string) {

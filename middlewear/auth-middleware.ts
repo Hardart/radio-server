@@ -13,7 +13,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
   const userData = tokenService.validateAccessToken(accessToken)
   if (!userData) return next(ErrorApi.UnathorizedError())
 
-  const { id, email, name, roles } = userData
-  req.body.user = { id, email, name, roles }
+  const { id, email, fullName, roles } = userData
+  req.body.user = { id, email, fullName, roles }
   next()
 }

@@ -5,6 +5,7 @@ import { Server } from 'socket.io'
 import { onConnection } from './service/socket-service'
 import mongoose from 'mongoose'
 import router from './router'
+import routerAuthV1 from './router/v1'
 import adminRoutes from './router/admin'
 import filesRoutes from './router/files'
 import ErrorService from './service/error-service'
@@ -25,6 +26,7 @@ app.use(express.static('assets'))
 app.use(cookerParser())
 app.use(cors({ credentials: true }))
 app.use('/api', router)
+app.use('/api/v1', routerAuthV1)
 app.use('/uploads', filesRoutes)
 app.use('/admin', adminRoutes)
 

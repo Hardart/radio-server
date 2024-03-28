@@ -39,7 +39,7 @@ class TokenService {
   validateAccessToken(token: string) {
     try {
       const acces = process.env.ACCESS_TOKEN as string
-      const userData = jwt.verify(token, acces) as User & { id: string }
+      const userData = jwt.verify(token, acces) as User & { id: string; fullName: string }
       return userData
     } catch (error) {
       return null

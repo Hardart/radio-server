@@ -1,15 +1,12 @@
 import articleService from '../service/article-service'
 import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
+import BaseController from './base-controller'
 
-class ArticleController {
+class ArticleController extends BaseController {
   async all(_: Request, res: Response, next: NextFunction) {
-    try {
-      const news = await articleService.all()
-      return res.json(news)
-    } catch (error) {
-      next(error)
-    }
+    const articles = await articleService.all()
+    res.status(200).json(ArticleController.response({ articles }))
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
@@ -44,13 +41,9 @@ class ArticleController {
   }
 
   async oneById(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.query as Record<string, string>
-      const article = await articleService.findById(id)
-      return res.json(article)
-    } catch (error) {
-      next(error)
-    }
+    const { id } = req.query as Record<string, string>
+    const article = await articleService.findById(id)
+    res.status(200).json(ArticleController.response({ article }))
   }
 
   async addOne(req: Request, res: Response, next: NextFunction) {

@@ -4,11 +4,23 @@ const UserSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    name: String,
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     avatar: String,
-    roles: { type: Array, default: ['user'], required: true },
+    roles: { type: [String], default: ['user'], required: true },
   },
-  { toObject: { virtuals: true }, versionKey: false, timestamps: true }
+  {
+    toObject: { virtuals: true },
+    versionKey: false,
+    timestamps: true,
+    virtuals: {
+      fullName: {
+        get() {
+          return this.lastName + ' ' + this.firstName
+        },
+      },
+    },
+  }
 )
 
 export type User = InferSchemaType<typeof UserSchema>

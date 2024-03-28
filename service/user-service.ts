@@ -4,15 +4,15 @@ import tokenService from './token-service'
 import ErrorApi from '../handlers/error-api'
 
 class UserService {
-  async registration({ email, password, name, roles = ['editor'] }: User) {
+  async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
     const candidate = await User.findOne({ email })
     if (candidate) throw ErrorApi.BadRequest(`Пользователь с адресом ${email} уже существует`)
     const hashPassword = await bcrypt.hash(password, 5)
-    const user = await User.create({ email, password: hashPassword, name, roles })
-    const { id } = user
-    const tokens = tokenService.generateTokens({ id, email, name })
+    const user = await User.create({ email, password: hashPassword, firstName, lastName, roles })
+    const { id, fullName } = user
+    const tokens = tokenService.generateTokens({ id, email, fullName })
     await tokenService.saveRefreshToken(id, tokens.refreshToken)
-    return { ...tokens, user: { id, email, name, roles } }
+    return { ...tokens, user: { id, email, fullName, roles } }
   }
 
   async login({ email, password }: User) {
@@ -22,11 +22,16 @@ class UserService {
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if (!isPasswordCorrect) throw ErrorApi.BadRequest(`Неверный пароль`)
 
-    const { id, name, roles, avatar } = user
-    const tokens = tokenService.generateTokens({ id, email, name, roles, avatar })
+    const { id, fullName, roles, avatar } = user
+    const tokens = tokenService.generateTokens({ id, email, fullName, roles, avatar })
     await tokenService.saveRefreshToken(id, tokens.refreshToken)
 
-    return { ...tokens, user: { id, email, name, roles, avatar } }
+    return { ...tokens, user: { id, email, fullName, roles, avatar } }
+  }
+
+  async add(userData: User) {
+    const user = await User.create(userData)
+    return user
   }
 
   async logout(refreshToken: string) {
@@ -41,18 +46,14 @@ class UserService {
     if (!userData || !tokenData) throw ErrorApi.UnathorizedError()
     const user = await User.findById(userData.id)
     if (!user) throw Error('Пользователь не найден')
-    const { id, email, name, roles, avatar } = user
-    const tokens = tokenService.generateTokens({ id, email, name, roles, avatar })
+    const { id, email, fullName, roles, avatar } = user
+    const tokens = tokenService.generateTokens({ id, email, fullName, roles, avatar })
     await tokenService.saveRefreshToken(id, tokens.refreshToken)
-    return { ...tokens, user: { id, email, name, roles, avatar } }
+    return { ...tokens, user: { id, email, fullName, roles, avatar } }
   }
 
   async getAll() {
-    try {
-      return await User.find()
-    } catch (error) {
-      console.log(error)
-    }
+    return await User.find()
   }
 
   async updateOne(data: User & { id: string; password_new: string }) {
@@ -63,10 +64,10 @@ class UserService {
     data.password = await bcrypt.hash(data.password_new, 5)
     const updatedUser = await User.findByIdAndUpdate(data.id, data, { new: true })
     if (!updatedUser) throw ErrorApi.userUpdateFail(`Ошибка при обновлении пользователя`)
-    const { id, email, name, roles, avatar } = updatedUser
-    const tokens = tokenService.generateTokens({ id, email, name, avatar })
+    const { id, email, fullName, roles, avatar } = updatedUser
+    const tokens = tokenService.generateTokens({ id, email, fullName, avatar })
     await tokenService.saveRefreshToken(id, tokens.refreshToken)
-    return { ...tokens, user: { id, email, name, roles, avatar } }
+    return { ...tokens, user: { id, email, fullName, roles, avatar } }
   }
 }
 

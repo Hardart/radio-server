@@ -2,13 +2,13 @@ export default class ErrorApi extends Error {
   statusCode
   isOperational
   errors
-  custom
+
   constructor(statusCode: number, message: string, errors: any[] = []) {
     super(message)
     this.statusCode = statusCode
     this.isOperational = true
-    this.custom = true
     this.errors = errors
+
     Error.captureStackTrace(this, this.constructor)
   }
 
@@ -17,7 +17,7 @@ export default class ErrorApi extends Error {
   }
 
   static NoEnvVariable(varaible: string) {
-    return new ErrorApi(400, `Переменной ${varaible} нет в файле .env`)
+    return new ErrorApi(404, `Переменной ${varaible} нет в файле .env`)
   }
 
   static UnathorizedError() {
