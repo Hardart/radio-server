@@ -5,7 +5,8 @@
   "main": "server.js",
   "module": "true",
   "scripts": {
-    "start": "nodemon server.ts"
+    "start": "NODE_ENV=development nodemon server.ts",
+    "start:prod": "NODE_ENV=production nodemon server.ts"
   },
   "keywords": [],
   "author": "",

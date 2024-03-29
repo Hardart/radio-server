@@ -1,24 +1,11 @@
 import type { Response, Request } from 'express'
 import trackService from '../service/track-service'
+import BaseController from './base-controller'
 
-class TrackController {
+class TrackController extends BaseController {
   async list(req: Request, res: Response) {
-    const { limit } = req.query
-    const tracks = await trackService.list(Number(limit))
-    return res.json(tracks)
-  }
-
-  async all(req: Request, res: Response) {
-    const tracks = await trackService.all()
-    const count = await trackService.count()
-    res.setHeader('X-Total', count)
-    return res.json(tracks)
-  }
-
-  async getByDate(req: Request, res: Response) {
-    const { date } = req.body
-    const tracks = await trackService.history(String(date))
-    return res.json(tracks)
+    const tracks = await trackService.list()
+    res.status(200).json(TrackController.response({ tracks }))
   }
 }
 

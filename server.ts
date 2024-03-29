@@ -1,19 +1,11 @@
 import * as dotenv from 'dotenv'
-import express from 'express'
+import app from './app'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import { onConnection } from './service/socket-service'
 import mongoose from 'mongoose'
-import router from './router'
-import routerAuthV1 from './router/v1'
-import adminRoutes from './router/admin'
-import filesRoutes from './router/files'
 import ErrorService from './service/error-service'
-import { ErrorHandler } from './middlewear/error-middleware'
-import cors from 'cors'
-import cookerParser from 'cookie-parser'
+
 dotenv.config({ path: __dirname + '/.env' })
-const app = express()
 
 const PORT = process.env.PORT || 3068
 const httpServer = createServer(app)
@@ -21,20 +13,9 @@ const io = new Server(httpServer, {
   cors: { allowedHeaders: '*', credentials: true },
 })
 
-app.use(express.json())
-app.use(express.static('assets'))
-app.use(cookerParser())
-app.use(cors({ credentials: true }))
-app.use('/api', router)
-app.use('/api/v1', routerAuthV1)
-app.use('/uploads', filesRoutes)
-app.use('/admin', adminRoutes)
-
-app.use(ErrorHandler)
-
 startServer()
 
-io.on('connection', onConnection(io))
+io.on('connection', () => {})
 
 async function startServer() {
   try {

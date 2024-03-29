@@ -1,7 +1,8 @@
 import type { Response, Request } from 'express'
 import userService from '../service/user-service'
-import ErrorApi from '../handlers/error-api'
+
 import BaseController from './base-controller'
+import AppError from '../handlers/error-handler'
 
 class UserController extends BaseController {
   async registration(req: Request, res: Response) {
@@ -15,8 +16,7 @@ class UserController extends BaseController {
   async login(req: Request, res: Response) {
     // const validErrors = validationResult(req)
     // if (!validErrors.isEmpty()) return next(ErrorApi.BadRequest('Ошибка при валидации', validErrors.array()))
-    const userData = req.body
-    const { accessToken, refreshToken } = await userService.login(userData)
+    const { accessToken, refreshToken } = await userService.login(req.body)
     res.cookie('refreshToken', refreshToken, { ...UserController.refreshOptions })
     res.status(200).json(UserController.response({ accessToken }))
   }
@@ -42,13 +42,13 @@ class UserController extends BaseController {
   }
 
   async check(req: Request, res: Response) {
-    if (!req.body?.user) throw ErrorApi.UnathorizedError()
+    if (!req.body?.user) throw AppError.UnathorizedError()
     res.status(200).json(UserController.response({ userId: req.body.user.id }))
   }
 
   async add(req: Request, res: Response) {
     const userData = req.body
-    if (!userData) throw ErrorApi.UnathorizedError()
+    if (!userData) throw AppError.UnathorizedError()
     const user = await userService.add(userData)
     res.status(200).json(UserController.response({ user }))
   }

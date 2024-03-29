@@ -9,6 +9,28 @@ class ArticleController extends BaseController {
     res.status(200).json(ArticleController.response({ articles }))
   }
 
+  async oneById(req: Request, res: Response, next: NextFunction) {
+    const article = await articleService.findById(req.body.id)
+    res.status(200).json(ArticleController.response({ article }))
+  }
+
+  async addOne(req: Request, res: Response, next: NextFunction) {
+    const article = await articleService.add(req.body)
+    res.status(200).json(ArticleController.response({ article }))
+  }
+
+  async updateOne(req: Request, res: Response, next: any) {
+    const article = await articleService.updateOne(req.body)
+    res.status(200).json(ArticleController.response({ article }))
+  }
+
+  async deleteOne(req: Request, res: Response, next: any) {
+    const article = await articleService.deleteOne(req.body.id)
+    res.status(200).json(ArticleController.response({ article }))
+  }
+
+  // ============================================================
+
   async list(req: Request, res: Response, next: NextFunction) {
     try {
       const queryParams = req.body.queryParams as QueryParams
@@ -35,42 +57,6 @@ class ArticleController extends BaseController {
     try {
       const articles = await articleService.findByTag('музыка')
       return res.json(articles)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async oneById(req: Request, res: Response, next: NextFunction) {
-    const { id } = req.query as Record<string, string>
-    const article = await articleService.findById(id)
-    res.status(200).json(ArticleController.response({ article }))
-  }
-
-  async addOne(req: Request, res: Response, next: NextFunction) {
-    try {
-      const articleData = req.body
-      const article = await articleService.add(articleData)
-      return res.json(article)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async updateOne(req: Request, res: Response, next: any) {
-    try {
-      const articleData = req.body
-      const article = await articleService.updateOne(articleData)
-      return res.json(article)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async deleteOne(req: Request, res: Response, next: any) {
-    try {
-      const { id } = req.body
-      const cat = await articleService.deleteOne(id)
-      return res.json(cat)
     } catch (error) {
       next(error)
     }

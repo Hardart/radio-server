@@ -1,5 +1,5 @@
 export enum ResponseStatuses {
-  SUCCESS = 'ok',
+  SUCCESS = 'success',
   FAIL = 'fail',
   ERROR = 'error',
 }

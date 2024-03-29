@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken'
 import { Token } from '../models/TokenModel'
-import ErrorApi from '../handlers/error-api'
 import { User } from '../models/UserModel'
+import AppError from '../handlers/error-handler'
 
 class TokenService {
   generateTokens(payload: object) {
     const access = process.env.ACCESS_TOKEN
     const refresh = process.env.REFRESH_TOKEN
-    if (!access || !refresh) throw ErrorApi.NoEnvVariable('access or refresh')
+    if (!access || !refresh) throw AppError.NoEnvVariable('access or refresh')
     const accessToken = jwt.sign(payload, access, { expiresIn: '1m', algorithm: 'HS512', noTimestamp: true })
     const refreshToken = jwt.sign(payload, refresh, { expiresIn: '1d' })
     return {
