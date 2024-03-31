@@ -6,11 +6,13 @@ import deleteAllImagesById from '../../middlewear/delete-all-middleware'
 import deleteOriginalImage from '../../middlewear/delete-original-middleware'
 import deleteFolder from '../../middlewear/delete-folder-middleware'
 import { asyncErrorHandler } from '../../handlers/error-handler'
+import authMiddleware from '../../middlewear/auth-middleware'
 
 export default function fileRouter(router: Router) {
-  router.post('/files', asyncErrorHandler(filesController.list))
+  router.post('/files', authMiddleware, asyncErrorHandler(filesController.list))
   router.post(
     '/image-avatar',
+    authMiddleware,
     imageUploadMiddlewear.single('avatar'),
     resizeImage,
     deleteOriginalImage,
@@ -18,6 +20,7 @@ export default function fileRouter(router: Router) {
   )
   router.post(
     '/image-gallery',
+    authMiddleware,
     imageUploadMiddlewear.single('gallery'),
     resizeImage,
     deleteOriginalImage,
@@ -25,11 +28,12 @@ export default function fileRouter(router: Router) {
   )
   router.post(
     '/image-news',
+    authMiddleware,
     imageUploadMiddlewear.single('news'),
     resizeImage,
     deleteOriginalImage,
     asyncErrorHandler(filesController.upload)
   )
-  router.post('/image-delete', deleteAllImagesById, asyncErrorHandler(filesController.delete))
-  router.post('/folder-delete', deleteFolder, asyncErrorHandler(filesController.delete))
+  router.post('/image-delete', authMiddleware, deleteAllImagesById, asyncErrorHandler(filesController.delete))
+  router.post('/folder-delete', authMiddleware, deleteFolder, asyncErrorHandler(filesController.delete))
 }

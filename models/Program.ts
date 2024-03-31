@@ -5,10 +5,13 @@ const ProgramSchema = new Schema(
     title: { type: String, required: true },
     description: String,
     image: String,
-    hosts: [{ type: Schema.Types.ObjectId, ref: 'Host' }],
-    isReplay: { type: Boolean, default: false },
-    start: { type: String, required: true },
-    end: { type: String, required: true },
+    hosts: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    schedule: {
+      daysId: [Number],
+      start: { type: String, required: true },
+      end: { type: String, required: true },
+      isReplay: { type: Boolean, default: false },
+    },
   },
   { timestamps: false, versionKey: false, toObject: { virtuals: true } }
 )

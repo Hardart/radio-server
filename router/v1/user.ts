@@ -5,6 +5,6 @@ import { asyncErrorHandler } from '../../handlers/error-handler'
 
 export default function userRouter(router: Router) {
   router.post('/user-list', asyncErrorHandler(userController.list))
-  router.post('/user-add', asyncErrorHandler(userController.add))
+  router.post('/user-add', authMiddleware, asyncErrorHandler(userController.add))
   router.post('/user-update', authMiddleware, asyncErrorHandler(userController.update))
 }

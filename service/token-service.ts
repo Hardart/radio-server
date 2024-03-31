@@ -8,8 +8,8 @@ class TokenService {
     const access = process.env.ACCESS_TOKEN
     const refresh = process.env.REFRESH_TOKEN
     if (!access || !refresh) throw AppError.NoEnvVariable('access or refresh')
-    const accessToken = jwt.sign(payload, access, { expiresIn: '1m', algorithm: 'HS512', noTimestamp: true })
-    const refreshToken = jwt.sign(payload, refresh, { expiresIn: '1d' })
+    const accessToken = jwt.sign(payload, access, { expiresIn: '10m', algorithm: 'HS512', noTimestamp: true })
+    const refreshToken = jwt.sign(payload, refresh, { expiresIn: '1h' })
     return {
       accessToken,
       refreshToken,
@@ -22,25 +22,23 @@ class TokenService {
       tokenData.refreshToken = refreshToken
       return tokenData.save()
     }
-    const token = await Token.create({ user: userId, refreshToken })
-    return token
+
+    return await Token.create({ user: userId, refreshToken })
   }
 
   async clearToken(refreshToken: string) {
-    const tokenData = await Token.deleteOne({ refreshToken })
-    return tokenData
+    return await Token.deleteOne({ refreshToken })
   }
 
   async getToken(refreshToken: string) {
-    const tokenData = await Token.findOne({ refreshToken })
-    return tokenData
+    return await Token.findOne({ refreshToken })
   }
 
   validateAccessToken(token: string) {
     try {
-      const acces = process.env.ACCESS_TOKEN as string
-      const userData = jwt.verify(token, acces) as User & { id: string; fullName: string }
-      return userData
+      const access = process.env.ACCESS_TOKEN
+      if (typeof access !== 'string') throw AppError.NoEnvVariable('access')
+      return jwt.verify(token, access) as User & { id: string; fullName: string }
     } catch (error) {
       return null
     }
@@ -48,9 +46,9 @@ class TokenService {
 
   validateRefreshToken(token: string) {
     try {
-      const refresh = process.env?.REFRESH_TOKEN as string
-      const userData = jwt.verify(token, refresh) as User & { id: string }
-      return userData
+      const refresh = process.env?.REFRESH_TOKEN
+      if (typeof refresh !== 'string') throw AppError.NoEnvVariable('refresh')
+      return jwt.verify(token, refresh) as User & { id: string }
     } catch (error) {
       return null
     }
