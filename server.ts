@@ -8,10 +8,12 @@ const radioStation = new Parser({
   metadataInterval: 6,
   userAgent: 'HDRT_Parser',
 })
+
 radioStation.on('metadata', onMetadata)
 radioStation.on('error', err => ErrorService.addError(err))
 radioStation.on('empty', () => ErrorService.saveEmpty('Пустые данные'))
 let title: string | undefined = ''
+
 function onMetadata(metadata: Map<string, string>) {
   const streamTitle = metadata.get('StreamTitle')
   if (title !== streamTitle) {
