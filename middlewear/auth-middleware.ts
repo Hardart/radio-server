@@ -13,7 +13,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
   const userData = tokenService.validateAccessToken(accessToken)
   if (!userData) throw AppError.UnathorizedError()
 
-  const { id, email, fullName, roles } = userData
-  req.body.user = { id, email, fullName, roles }
+  const { id, email, fullName, roles, firstName, lastName } = userData
+  req.body.user = { id, email, fullName, roles, firstName, lastName }
   next()
 }

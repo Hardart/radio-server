@@ -22,11 +22,11 @@ class UserService {
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if (!isPasswordCorrect) throw AppError.BadRequest(`Неверный пароль`)
 
-    const { id, fullName, roles, avatar } = user
-    const tokens = tokenService.generateTokens({ id, email, fullName, roles, avatar })
-    await tokenService.saveRefreshToken(id, tokens.refreshToken)
+    // const { id, fullName, roles, avatar, firstName, lastName } = user
+    const tokens = tokenService.generateTokens(UserService.userData(user))
+    await tokenService.saveRefreshToken(UserService.userData(user).id, tokens.refreshToken)
 
-    return { ...tokens, user: { id, email, fullName, roles, avatar } }
+    return { ...tokens, user: UserService.userData(user) }
   }
 
   async add(userData: User) {
@@ -46,10 +46,9 @@ class UserService {
     if (!userData || !tokenData) throw AppError.UnathorizedError()
     const user = await User.findById(userData.id)
     if (!user) throw Error('Пользователь не найден')
-    const { id, email, fullName, roles, avatar } = user
-    const tokens = tokenService.generateTokens({ id, email, fullName, roles, avatar })
-    await tokenService.saveRefreshToken(id, tokens.refreshToken)
-    return { ...tokens, user: { id, email, fullName, roles, avatar } }
+    const tokens = tokenService.generateTokens(UserService.userData(user))
+    await tokenService.saveRefreshToken(UserService.userData(user).id, tokens.refreshToken)
+    return { ...tokens, user: UserService.userData(user) }
   }
 
   async getAll() {
@@ -64,10 +63,14 @@ class UserService {
     data.password = await bcrypt.hash(data.password_new, 5)
     const updatedUser = await User.findByIdAndUpdate(data.id, data, { new: true })
     if (!updatedUser) throw AppError.userUpdateFail(`Ошибка при обновлении пользователя`)
-    const { id, email, fullName, roles, avatar } = updatedUser
-    const tokens = tokenService.generateTokens({ id, email, fullName, avatar })
-    await tokenService.saveRefreshToken(id, tokens.refreshToken)
-    return { ...tokens, user: { id, email, fullName, roles, avatar } }
+    // const { id, email, fullName, roles, avatar, firstName, lastName } = updatedUser
+    const tokens = tokenService.generateTokens(UserService.userData(updatedUser))
+    await tokenService.saveRefreshToken(UserService.userData(updatedUser).id, tokens.refreshToken)
+    return { ...tokens, user: UserService.userData(updatedUser) }
+  }
+
+  private static userData({ id, email, fullName, roles, avatar, firstName, lastName }: any) {
+    return { id, email, fullName, roles, avatar, firstName, lastName }
   }
 }
 

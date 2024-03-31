@@ -2,11 +2,13 @@ import articleService from '../service/article-service'
 import type { Response, Request, NextFunction } from 'express'
 import type { QueryParams } from '../types/custom-request'
 import BaseController from './base-controller'
+import tagService from '../service/tag-service'
 
 class ArticleController extends BaseController {
   async all(_: Request, res: Response, next: NextFunction) {
     const articles = await articleService.all()
-    res.status(200).json(ArticleController.response({ articles }))
+    const tags = await tagService.list()
+    res.status(200).json(ArticleController.response({ articles, tags }))
   }
 
   async oneById(req: Request, res: Response, next: NextFunction) {
