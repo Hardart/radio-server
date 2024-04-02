@@ -15,8 +15,6 @@ const UserSchema = new Schema(
   }
 )
 
-UserSchema.path('email', ())
-
 UserSchema.set('toObject', {
   virtuals: true,
   transform: function (_, ret) {
