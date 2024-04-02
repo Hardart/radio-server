@@ -7,21 +7,34 @@ const UserSchema = new Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     avatar: String,
-    roles: { type: [String], default: ['user'], required: true },
+    roles: { type: [String], default: ['editor'], required: true },
   },
   {
-    toObject: { virtuals: true },
+    timestamps: false,
     versionKey: false,
-    timestamps: true,
-    virtuals: {
-      fullName: {
-        get() {
-          return this.lastName + ' ' + this.firstName
-        },
-      },
-    },
   }
 )
 
-export type User = InferSchemaType<typeof UserSchema>
+UserSchema.path('email', ())
+
+UserSchema.set('toObject', {
+  virtuals: true,
+  transform: function (_, ret) {
+    ret.fullName = ret.lastName + ' ' + ret.firstName
+  },
+})
+UserSchema.set('toJSON', {
+  versionKey: false,
+  virtuals: true,
+  transform: function (_, ret) {
+    delete ret._id
+    ret.fullName = ret.lastName + ' ' + ret.firstName
+  },
+})
+
+UserSchema.virtual('fullName').get(function () {
+  return this.lastName + ' ' + this.firstName
+})
+
+export type User = InferSchemaType<typeof UserSchema> & { fullName?: string }
 export const User = model('User', UserSchema)

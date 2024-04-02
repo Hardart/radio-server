@@ -5,23 +5,19 @@ import AppError from '../handlers/error-handler'
 
 class UserService {
   async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
-    const candidate = await User.findOne({ email })
-    if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
+    // const candidate = await User.findOne({ email })
+    // if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
     const hashPassword = await bcrypt.hash(password, 5)
-    const user = await User.create({ email, password: hashPassword, firstName, lastName, roles })
-    const { id, fullName } = user
-    const tokens = tokenService.generateTokens({ id, email, fullName })
-    await tokenService.saveRefreshToken(id, tokens.refreshToken)
-    return { ...tokens, user: { id, email, fullName, roles } }
+    return await User.create({ email, password: hashPassword, firstName, lastName, roles })
   }
 
   async login({ email, password }: User) {
     const user = await User.findOne({ email })
     if (!user) throw AppError.BadRequest(`Пользователь с адресом ${email} не найден`)
-
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if (!isPasswordCorrect) throw AppError.BadRequest(`Неверный пароль`)
 
+    console.log(user)
     // const { id, fullName, roles, avatar, firstName, lastName } = user
     const tokens = tokenService.generateTokens(UserService.userData(user))
     await tokenService.saveRefreshToken(UserService.userData(user).id, tokens.refreshToken)
@@ -35,8 +31,7 @@ class UserService {
   }
 
   async logout(refreshToken: string) {
-    const token = tokenService.clearToken(refreshToken)
-    return token
+    return tokenService.clearToken(refreshToken)
   }
 
   async refresh(refreshToken: string) {
@@ -51,8 +46,8 @@ class UserService {
     return { ...tokens, user: UserService.userData(user) }
   }
 
-  async getAll() {
-    return await User.find()
+  async getAll(query: object) {
+    return await User.find(query).select('-password')
   }
 
   async updateOne(data: User & { id: string; password_new: string }) {
@@ -69,9 +64,22 @@ class UserService {
     return { ...tokens, user: UserService.userData(updatedUser) }
   }
 
-  private static userData({ id, email, fullName, roles, avatar, firstName, lastName }: any) {
+  // NEED FIX
+  private static userData(user: User) {
+    const { id, email, fullName, roles, avatar, firstName, lastName } = user as unknown as User & { id: string }
     return { id, email, fullName, roles, avatar, firstName, lastName }
   }
+
+  // async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
+  //   const candidate = await User.findOne({ email })
+  //   if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
+  //   const hashPassword = await bcrypt.hash(password, 5)
+  //   const user = await User.create({ email, password: hashPassword, firstName, lastName, roles })
+  //   const { id, fullName } = user
+  //   const tokens = tokenService.generateTokens({ id, email, fullName })
+  //   await tokenService.saveRefreshToken(id, tokens.refreshToken)
+  //   return { ...tokens, user: { id, email, fullName, roles } }
+  // }
 }
 
 export default new UserService()
