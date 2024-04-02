@@ -1,4 +1,5 @@
-import { Schema, model, InferSchemaType } from 'mongoose'
+import mongoose, { Schema, model, InferSchemaType } from 'mongoose'
+import AppError from '../handlers/error-handler'
 
 const UserSchema = new Schema(
   {
@@ -14,6 +15,14 @@ const UserSchema = new Schema(
     versionKey: false,
   }
 )
+
+UserSchema.post('save', function (error: Error, _: any, next: mongoose.CallbackWithoutResultAndOptionalError) {
+  if (error instanceof mongoose.mongo.MongoError) {
+    next(AppError.BadRequest('Пользователь с таким Email уже существует'))
+  } else {
+    next()
+  }
+})
 
 UserSchema.set('toObject', {
   virtuals: true,

@@ -16,8 +16,6 @@ class UserService {
     if (!user) throw AppError.BadRequest(`Пользователь с адресом ${email} не найден`)
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if (!isPasswordCorrect) throw AppError.BadRequest(`Неверный пароль`)
-
-    console.log(user)
     // const { id, fullName, roles, avatar, firstName, lastName } = user
     const tokens = tokenService.generateTokens(UserService.userData(user))
     await tokenService.saveRefreshToken(UserService.userData(user).id, tokens.refreshToken)
