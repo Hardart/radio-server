@@ -34,6 +34,14 @@ export default function fileRouter(router: Router) {
     deleteOriginalImage,
     asyncErrorHandler(filesController.upload)
   )
+  router.post(
+    '/image-programs',
+    authMiddleware,
+    imageUploadMiddlewear.single('programs'),
+    resizeImage,
+    deleteOriginalImage,
+    asyncErrorHandler(filesController.upload)
+  )
   router.post('/image-delete', authMiddleware, deleteAllImagesById, asyncErrorHandler(filesController.delete))
   router.post('/folder-delete', authMiddleware, deleteFolder, asyncErrorHandler(filesController.delete))
 }

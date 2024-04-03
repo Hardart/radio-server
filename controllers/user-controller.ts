@@ -52,8 +52,8 @@ class UserController extends BaseController {
     res.status(200).json(UserController.response({ user }))
   }
 
-  async list(req: Request, res: Response) {
-    const users = await userService.getAll(req.query)
+  async list(_: Request, res: Response) {
+    const users = await userService.getAll()
     res.status(200).json(UserController.response({ users }))
   }
 }

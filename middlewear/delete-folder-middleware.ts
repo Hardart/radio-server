@@ -19,6 +19,7 @@ function deleteFolder(req: Request, res: Response, next: NextFunction) {
       req.body.status = false
     }
   } catch (error) {
+    console.warn(error)
     if (isError(error)) throw AppError.custom(error.errno)
   }
 

@@ -44,8 +44,8 @@ class UserService {
     return { ...tokens, user: UserService.userData(user) }
   }
 
-  async getAll(query: object) {
-    return await User.find(query).select('-password')
+  async getAll() {
+    return await User.find().select('-password')
   }
 
   async updateOne(data: User & { id: string; password_new: string }) {
