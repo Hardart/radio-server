@@ -15,11 +15,13 @@ const io = new Server(httpServer, {
 
 startServer()
 
-io.on('connection', () => {})
+io.on('connection', socket => {
+  console.log(socket.id)
+})
 
 async function startServer() {
   try {
-    await mongoose.connect(process.env.DB_URL_LOCAL || '')
+    await mongoose.connect(process.env.MONGO_DB || '')
     console.log('====================================')
     console.log(`БД подключена`)
   } catch (error) {
