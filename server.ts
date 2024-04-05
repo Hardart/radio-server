@@ -25,6 +25,8 @@ async function startServer() {
     console.log('====================================')
     console.log(`БД подключена`)
   } catch (error) {
+    console.log('====================================')
+    console.error(`ERROR: Ошибка при подключении к БД!!!`)
     ErrorService.append(error)
   }
   app.listen(PORT, () => {
