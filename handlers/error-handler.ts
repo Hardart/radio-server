@@ -46,6 +46,10 @@ export default class AppError extends Error {
     return new AppError(401, 'Пользователь не авторизован')
   }
 
+  static PermissonDenided() {
+    return new AppError(403, 'У вас не достаточно прав')
+  }
+
   static articleExist() {
     return new AppError(11000, 'Новость с таким слагом уже существует')
   }
@@ -57,7 +61,7 @@ export default class AppError extends Error {
   static ValidationError(err: mongoose.Error.ValidationError) {
     const mongooseError = { ...err } as unknown as mongoose.Error.ValidationError
     const values = Object.values(mongooseError.errors)
-    const errors = values.map(e => {
+    const errors = values.map((e) => {
       return { message: e.message, path: e.path, value: e.value }
     })
     return new AppError(400, 'Ошибка при валидации данных', errors)
@@ -67,9 +71,9 @@ export default class AppError extends Error {
     const errors = [
       { code: -66, message: 'Удаление невозможно! Папка, которую Вы пытаетесь удалить, содержит файлы' },
       { code: 11000, message: 'Новость с таким слагом уже существует' },
-      { code: 'id', message: 'Параметр ID в запросе отсутствует или имеет не верный формат' },
+      { code: 'id', message: 'Параметр ID в запросе отсутствует или имеет не верный формат' }
     ]
-    const message = errors.find(er => er.code == code)?.message || 'Не обработанная ошибка, сообщите разработчику'
+    const message = errors.find((er) => er.code == code)?.message || 'Не обработанная ошибка, сообщите разработчику'
     return new AppError(400, message)
   }
 }
