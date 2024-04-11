@@ -7,6 +7,11 @@ class ProgramController extends BaseController {
     const programs = await programService.list()
     res.status(200).json(ProgramController.response({ programs }))
   }
+
+  async one(req: Request, res: Response, next: NextFunction) {
+    const program = await programService.one()
+    res.status(200).json(program)
+  }
 }
 
 export default new ProgramController()
