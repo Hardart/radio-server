@@ -6,8 +6,7 @@ class CategoryService {
   }
 
   async add(data: Category) {
-    const cat = new Category(data)
-    return await cat.save()
+    return await Category.create(data)
   }
 
   async updateOne(data: Category) {

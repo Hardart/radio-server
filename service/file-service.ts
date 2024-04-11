@@ -1,15 +1,8 @@
 import fs from 'fs'
-import ErrorService from './error-service'
 
 class FileService {
   readImages(src?: string) {
-    try {
-      return foldersMap(`./assets${src || '/images'}/`)
-    } catch (error) {
-      console.log(error)
-      ErrorService.append(error)
-      return
-    }
+    return foldersMap(`./assets${src || '/images'}/`)
   }
 }
 

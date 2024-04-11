@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { Response, NextFunction, Request } from 'express'
-import ErrorApi, { isError } from '../handlers/error-api'
+import AppError, { isError } from '../handlers/error-handler'
 
 function deleteFolder(req: Request, res: Response, next: NextFunction) {
   const { path } = req.body
@@ -19,7 +19,8 @@ function deleteFolder(req: Request, res: Response, next: NextFunction) {
       req.body.status = false
     }
   } catch (error) {
-    if (isError(error)) throw ErrorApi.custom(error.errno)
+    console.warn(error)
+    if (isError(error)) throw AppError.custom(error.errno)
   }
 
   next()
