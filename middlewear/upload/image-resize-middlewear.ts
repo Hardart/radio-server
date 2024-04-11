@@ -16,13 +16,19 @@ export async function resizeImage(req: Request, res: Response, next: NextFunctio
       req.file.path = toPath(pathToOriginalFile, 75)
       break
     case 'gallery':
-      await sharp(pathToNewFile).resize({ width: 1530, height: 420 }).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 1500))
+      await sharp(pathToNewFile)
+        .resize({ width: 1530, height: 420 })
+        .webp({ quality: 90 })
+        .toFile(toPath(pathToOriginalFile, 1500))
       break
     case 'news':
-      sharp(pathToNewFile).resize({ width: 600, height: 360 }).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 600))
+      sharp(pathToNewFile)
+        .resize({ width: 600, height: 360 })
+        .webp({ quality: 90 })
+        .toFile(toPath(pathToOriginalFile, 600))
       req.file.path = toPath(pathToOriginalFile, 'orig')
       break
-    case 'program':
+    case 'programs':
       await sharp(pathToNewFile).resize({ width: 600 }).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 600))
       req.file.path = toPath(pathToOriginalFile, 600)
       break

@@ -56,6 +56,16 @@ class UserController extends BaseController {
     const users = await userService.getAll()
     res.status(200).json(UserController.response({ users }))
   }
+
+  async deleteOne(req: Request, res: Response) {
+    const user = await userService.deleteOne(req.body.id)
+    res.status(200).json(UserController.response({ user }))
+  }
+
+  async getHosts(req: Request, res: Response) {
+    const hosts = await userService.getHosts()
+    res.status(200).json(UserController.response({ hosts }))
+  }
 }
 
 export default new UserController()

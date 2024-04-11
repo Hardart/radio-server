@@ -5,8 +5,8 @@ import AppError from '../handlers/error-handler'
 
 class UserService {
   async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
-    // const candidate = await User.findOne({ email })
-    // if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
+    const candidate = await User.findOne({ email })
+    if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
     const hashPassword = await bcrypt.hash(password, 5)
     return await User.create({ email, password: hashPassword, firstName, lastName, roles })
   }
@@ -56,10 +56,17 @@ class UserService {
     data.password = await bcrypt.hash(data.password_new, 5)
     const updatedUser = await User.findByIdAndUpdate(data.id, data, { new: true })
     if (!updatedUser) throw AppError.userUpdateFail(`Ошибка при обновлении пользователя`)
-    // const { id, email, fullName, roles, avatar, firstName, lastName } = updatedUser
     const tokens = tokenService.generateTokens(UserService.userData(updatedUser))
     await tokenService.saveRefreshToken(UserService.userData(updatedUser).id, tokens.refreshToken)
     return { ...tokens, user: UserService.userData(updatedUser) }
+  }
+
+  async deleteOne(id: string) {
+    return await User.findByIdAndDelete(id).select('-password')
+  }
+
+  async getHosts() {
+    return await User.find({ roles: 'host' }).select('-password')
   }
 
   // NEED FIX
@@ -67,17 +74,6 @@ class UserService {
     const { id, email, fullName, roles, avatar, firstName, lastName } = user as unknown as User & { id: string }
     return { id, email, fullName, roles, avatar, firstName, lastName }
   }
-
-  // async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
-  //   const candidate = await User.findOne({ email })
-  //   if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
-  //   const hashPassword = await bcrypt.hash(password, 5)
-  //   const user = await User.create({ email, password: hashPassword, firstName, lastName, roles })
-  //   const { id, fullName } = user
-  //   const tokens = tokenService.generateTokens({ id, email, fullName })
-  //   await tokenService.saveRefreshToken(id, tokens.refreshToken)
-  //   return { ...tokens, user: { id, email, fullName, roles } }
-  // }
 }
 
 export default new UserService()
