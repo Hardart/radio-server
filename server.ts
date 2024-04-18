@@ -1,23 +1,22 @@
-import { Parser } from 'icecast-parser'
-import ErrorService from './service/error-service'
+import { Server } from 'socket.io'
+import { radioStation } from './app'
+let title: string | undefined = ''
+const io = new Server(3071, {
+  cors: { allowedHeaders: '*' }
+})
 
-const radioStation = new Parser({
-  url: 'https://stream.lolamedia.ru/rsh_federal',
-  emptyInterval: 10,
-  errorInterval: 10,
-  metadataInterval: 6,
-  userAgent: 'HDRT_Parser',
+io.on('connection', (socket) => {
+  console.log(socket.id)
+  io.emit('meta', title)
 })
 
 radioStation.on('metadata', onMetadata)
-radioStation.on('error', err => ErrorService.addError(err))
-radioStation.on('empty', () => ErrorService.saveEmpty('Пустые данные'))
-let title: string | undefined = ''
 
 function onMetadata(metadata: Map<string, string>) {
   const streamTitle = metadata.get('StreamTitle')
   if (title !== streamTitle) {
     title = streamTitle
-    ErrorService.saveStream(title)
+    console.log(title)
+    io.emit('meta', title)
   }
 }

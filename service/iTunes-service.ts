@@ -19,7 +19,7 @@ export class Itunes {
       const response = await fetch(`https://itunes.apple.com/search?${this.searchParams}`)
       return (await response.json()) as ItunesResponse
     } catch (error) {
-      ErrorService.append(error)
+      ErrorService.addError(error)
       return null
     }
   }
