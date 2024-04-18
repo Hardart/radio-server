@@ -1,12 +1,12 @@
 import { Track } from '../models/Track'
 import { ITrackMetadata } from '../types'
 
-export class TrackService {
-  static async findOne(artistName: string, trackTitle: string) {
+class TrackService {
+  async findOne(artistName: string, trackTitle: string) {
     return await Track.findOne({ artistName, trackTitle })
   }
 
-  static async save(trackData: ITrackMetadata) {
+  async save(trackData: ITrackMetadata) {
     return await Track.create(trackData)
   }
 

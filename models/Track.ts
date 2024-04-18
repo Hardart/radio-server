@@ -6,6 +6,7 @@ const TrackSchema = new Schema(
     trackTitle: String,
     cover: String,
     preview: String,
+    itinesId: Number
   },
   { timestamps: true, versionKey: false, toObject: { virtuals: true } }
 )
@@ -15,7 +16,7 @@ TrackSchema.set('toJSON', {
   virtuals: true,
   transform: function (_, ret) {
     delete ret._id
-  },
+  }
 })
 
 export type Track = InferSchemaType<typeof TrackSchema>

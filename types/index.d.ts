@@ -2,12 +2,14 @@ export interface ItunesResponse {
   resultCount: number
   results: ItunesSong[]
 }
+
 export interface ItunesSong {
   artistName: string
   artworkUrl30: string
   artworkUrl60: string
   artworkUrl100: string
   previewUrl: string
+  trackId: number
 }
 
 export interface ItunesTrackMeta {
