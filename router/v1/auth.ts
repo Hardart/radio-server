@@ -7,7 +7,7 @@ import authMiddleware from '../../middlewear/auth-middleware'
 function authRouter(router: Router) {
   router.post('/registration', authMiddleware, asyncErrorHandler(userController.registration))
   router.post('/login', checkLoginData, asyncErrorHandler(userController.login))
-  router.post('/check', asyncErrorHandler(userController.check))
+  router.post('/check', authMiddleware, asyncErrorHandler(userController.check))
   router.post('/refresh', asyncErrorHandler(userController.refresh))
 }
 
