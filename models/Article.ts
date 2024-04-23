@@ -2,14 +2,14 @@ import { Schema, model, InferSchemaType } from 'mongoose'
 
 const ArticleSchema = new Schema(
   {
-    title: { type: String, required: true },
-    slug: { type: String, required: [true, 'Поле SLUG обязательно!'], trim: true },
+    title: { type: String, required: true, trim: true },
+    slug: { type: String, required: [true, 'Поле SLUG обязательно!'], trim: true, unique: true },
     image: String,
-    content: { type: String, required: true },
+    content: { type: String, required: true, trim: true },
     publishAt: { type: Schema.Types.Date, default: new Date() },
     isPublished: { type: Boolean, default: false },
     categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-    tags: [String],
+    tags: [String]
   },
   { timestamps: true, versionKey: false }
 )
@@ -21,7 +21,7 @@ ArticleSchema.set('toJSON', {
     ret.category = ret.categoryId
     delete ret._id
     delete ret.categoryId
-  },
+  }
 })
 
 export type Article = InferSchemaType<typeof ArticleSchema>

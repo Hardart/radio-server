@@ -69,6 +69,10 @@ class UserService {
     return await User.find({ roles: 'host' }).select('-password')
   }
 
+  async findById(id: string) {
+    return await User.findById(id)
+  }
+
   // NEED FIX
   private static userData(user: User) {
     const { id, email, fullName, roles, avatar, firstName, lastName } = user as unknown as User & { id: string }

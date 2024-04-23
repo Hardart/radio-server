@@ -49,7 +49,8 @@ class ArticleService {
   async add(data: Article) {
     if (data.tags && data.tags.length)
       data.tags.forEach(async (tag) => await Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
-    return (await Article.create(data)).populate('categoryId')
+    const createdArticle = await Article.create(data)
+    return createdArticle.populate('categoryId')
   }
 
   async updateOne(data: ArticleWithID) {

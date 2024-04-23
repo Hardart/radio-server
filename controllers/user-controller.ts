@@ -66,6 +66,11 @@ class UserController extends BaseController {
     const hosts = await userService.getHosts()
     res.status(200).json(UserController.response({ hosts }))
   }
+
+  async findById(req: Request, res: Response) {
+    const host = await userService.findById(req.body.id)
+    res.status(200).json(UserController.response({ host }))
+  }
 }
 
 export default new UserController()

@@ -10,6 +10,11 @@ class ProgramController extends BaseController {
     res.status(200).json(ProgramController.response({ programs, hosts }))
   }
 
+  async addOne(req: Request, res: Response, next: NextFunction) {
+    const program = await programService.add(req.body)
+    res.status(200).json(ProgramController.response({ program }))
+  }
+
   async one(req: Request, res: Response, next: NextFunction) {
     const program = await programService.one()
     res.status(200).json(program)
