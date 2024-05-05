@@ -19,6 +19,10 @@ class ProgramService {
       }
     ])
   }
+
+  async deleteOne(id: string) {
+    return await Program.findByIdAndDelete(id)
+  }
 }
 
 export default new ProgramService()

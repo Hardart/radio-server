@@ -15,6 +15,11 @@ class ProgramController extends BaseController {
     res.status(200).json(ProgramController.response({ program }))
   }
 
+  async deleteOne(req: Request, res: Response, next: NextFunction) {
+    const program = await programService.deleteOne(req.body.id)
+    res.status(200).json(ProgramController.response({ program }))
+  }
+
   async one(req: Request, res: Response, next: NextFunction) {
     const program = await programService.one()
     res.status(200).json(program)
