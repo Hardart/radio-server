@@ -6,6 +6,7 @@ import categoryRouter from './categories'
 import trackRouter from './tracks'
 import fileRouter from './files'
 import programRouter from './programs'
+import galleryRouter from './gallery'
 const router = Router()
 
 userRouter(router)
@@ -15,5 +16,6 @@ categoryRouter(router)
 trackRouter(router)
 fileRouter(router)
 programRouter(router)
+galleryRouter(router)
 
 export default router

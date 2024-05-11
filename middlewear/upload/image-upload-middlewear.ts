@@ -19,16 +19,15 @@ const storage = multer.diskStorage({
 
   filename(req, file, cb) {
     cb(null, file.filename)
-  },
+  }
 })
 
 export default multer({ storage })
 
-
 function folderIdFromCurrentDate() {
   const date = new Date()
-  const year = Intl.DateTimeFormat('ru', {year: 'numeric'}).format(date)
-  const month = Intl.DateTimeFormat('ru', {month: '2-digit'}).format(date)
-  const day = Intl.DateTimeFormat('ru', {day: '2-digit'}).format(date)
+  const year = Intl.DateTimeFormat('ru', { year: 'numeric' }).format(date)
+  const month = Intl.DateTimeFormat('ru', { month: '2-digit' }).format(date)
+  const day = Intl.DateTimeFormat('ru', { day: '2-digit' }).format(date)
   return `${year}${month}${day}`
 }
