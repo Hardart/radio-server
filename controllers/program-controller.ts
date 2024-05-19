@@ -24,6 +24,11 @@ class ProgramController extends BaseController {
     const program = await programService.one()
     res.status(200).json(program)
   }
+
+  async updateOne(req: Request, res: Response, next: any) {
+    const program = await programService.updateOne(req.body)
+    res.status(200).json(ProgramController.response({ program }))
+  }
 }
 
 export default new ProgramController()

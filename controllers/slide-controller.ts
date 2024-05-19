@@ -12,6 +12,11 @@ class SlideController extends BaseController {
     const slide = await slideService.save(req.body)
     res.status(200).json(SlideController.response({ slide }))
   }
+
+  async updatePriority(req: Request, res: Response) {
+    const slides = await slideService.updatePriority(req.body)
+    res.status(200).json(SlideController.response({ slides }))
+  }
 }
 
 export default new SlideController()

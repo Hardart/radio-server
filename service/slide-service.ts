@@ -9,8 +9,13 @@ class SlideService {
     return await Slide.create(slideData)
   }
 
+  async updatePriority(slides: Slide[]) {
+    await Slide.deleteMany()
+    return await Slide.insertMany(slides)
+  }
+
   async list() {
-    return await Slide.find().select('-updatedAt').sort({ createdAt: 'asc' })
+    return await Slide.find().select('-updatedAt -createdAt').sort({ priority: 'asc' })
   }
 }
 

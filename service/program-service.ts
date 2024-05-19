@@ -20,6 +20,10 @@ class ProgramService {
     ])
   }
 
+  async updateOne(data: Program & { id: string }) {
+    return await Program.findByIdAndUpdate(data.id, data, { new: true })
+  }
+
   async deleteOne(id: string) {
     return await Program.findByIdAndDelete(id)
   }

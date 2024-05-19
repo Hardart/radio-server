@@ -10,6 +10,7 @@ req.rest
 # Node dependencies
 node_modules
 public/images
+assets
 
 # Logs
 logs

@@ -5,7 +5,8 @@ const SlideSchema = new Schema(
     src: { type: String, required: true },
     title: String,
     subtitle: String,
-    to: String
+    to: String,
+    priority: { type: Number, required: true }
   },
   { timestamps: true, versionKey: false, toObject: { virtuals: true } }
 )
