@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+build
 req.rest
 
 # Node dependencies

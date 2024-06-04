@@ -1,8 +1,9 @@
 import fs from 'fs'
 
 class FileService {
-  readImages(src?: string) {
-    return foldersMap(`./assets${src || '/images'}/`)
+  readImages(src: string) {
+    const baseSrc = src === '/images' ? `/Users/hardart/home${src}` : src
+    return foldersMap(baseSrc)
   }
 }
 
@@ -12,8 +13,9 @@ function foldersMap(path: string): string[] {
   const files = fs.readdirSync(path)
   return files
     .flatMap((f) => {
-      const fullPath = `${path}${f}`
-      return fullPath.replace('./assets', '')
+      const fullPath = `${path}/${f}`
+      // return fullPath.replace('/Users/hardart/home', '')
+      return fullPath
     })
     .filter((path) => {
       if (path.match(/\.(jpe?g|png|webp|avif)$/)) {

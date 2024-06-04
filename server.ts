@@ -1,21 +1,22 @@
 import * as dotenv from 'dotenv'
+import path from 'path'
 import app from './app'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import ErrorService from './service/error-service'
-
-dotenv.config({ path: __dirname + '/.env' })
+const envPath = process.env.NODE_ENV === 'production' ? path.join(__dirname, '..', '/.env') : __dirname + '/.env'
+dotenv.config({ path: envPath })
 
 const PORT = process.env.PORT || 3068
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
-  cors: { allowedHeaders: '*', credentials: true },
+  cors: { allowedHeaders: '*', credentials: true }
 })
 
 startServer()
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   console.log(socket.id)
 })
 

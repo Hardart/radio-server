@@ -10,8 +10,17 @@ const storage = multer.diskStorage({
     const imageId = crypto.randomBytes(8).toString('hex')
     const ext = getExtension(file.originalname)
     const fileName = `${imageId}.${ext}`
-    const dest = folderName == 'news' ? `./assets/images/${folderName}/${folderId}` : `./assets/images/${folderName}`
-    fs.mkdirSync(dest, { recursive: true })
+    const dest =
+      folderName == 'news'
+        ? `/Users/hardart/home/images/${folderName}/${folderId}`
+        : `/Users/hardart/home/images/${folderName}`
+    console.log(fs.readdirSync('/home'))
+    try {
+      fs.mkdirSync(dest, { recursive: true })
+    } catch (error) {
+      console.log(error)
+    }
+
     file.filename = fileName
 
     cb(null, dest)

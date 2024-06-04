@@ -5,8 +5,9 @@
   "main": "server.js",
   "module": "true",
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon server.ts",
-    "start:prod": "cross-env NODE_ENV=production nodemon server.ts"
+    "build": "cross-env NODE_ENV=production tsc",
+    "dev": "cross-env NODE_ENV=development nodemon server.ts",
+    "start": "cross-env NODE_ENV=production nodemon ./build/server.js"
   },
   "keywords": [],
   "author": "",

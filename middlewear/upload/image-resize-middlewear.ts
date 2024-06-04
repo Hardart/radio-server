@@ -3,24 +3,24 @@ import { Response, NextFunction, Request } from 'express'
 
 export async function resizeImage(req: Request, res: Response, next: NextFunction) {
   if (!req.file) return next()
+  let path
   const file = req.file
   const pathToOriginalFile = file.path
 
   await sharp(pathToOriginalFile).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 'orig'))
-  const pathToNewFile = `./${toPath(pathToOriginalFile, 'orig')}`
+  const pathToNewFile = `${toPath(pathToOriginalFile, 'orig')}`
   sharp(pathToNewFile).resize({ width: 200 }).webp({ quality: 85 }).toFile(toPath(pathToOriginalFile, 'preview'))
 
   switch (file.fieldname) {
     case 'avatar':
-      await sharp(pathToNewFile).resize({ width: 75 }).webp({ quality: 85 }).toFile(toPath(pathToOriginalFile, 75))
-      req.file.path = toPath(pathToOriginalFile, 75)
+      path = toPath(pathToOriginalFile, 75)
+      await sharp(pathToNewFile).resize({ width: 75 }).webp({ quality: 85 }).toFile(path)
+      req.file.path = path
       break
     case 'gallery':
-      await sharp(pathToNewFile)
-        .resize({ width: 1530, height: 420 })
-        .webp({ quality: 90 })
-        .toFile(toPath(pathToOriginalFile, 1500))
-      req.file.path = toPath(pathToOriginalFile, 1500)
+      path = toPath(pathToOriginalFile, 75)
+      await sharp(pathToNewFile).resize({ width: 1530, height: 420 }).webp({ quality: 90 }).toFile(path)
+      req.file.path = path
       break
     case 'news':
       sharp(pathToNewFile)
@@ -30,8 +30,9 @@ export async function resizeImage(req: Request, res: Response, next: NextFunctio
       req.file.path = toPath(pathToOriginalFile, 'orig')
       break
     case 'programs':
-      await sharp(pathToNewFile).resize({ width: 600 }).webp({ quality: 90 }).toFile(toPath(pathToOriginalFile, 600))
-      req.file.path = toPath(pathToOriginalFile, 600)
+      path = toPath(pathToOriginalFile, 600)
+      await sharp(pathToNewFile).resize({ width: 600 }).webp({ quality: 90 }).toFile(path)
+      req.file.path = path
       break
   }
 
