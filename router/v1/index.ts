@@ -8,6 +8,9 @@ import fileRouter from './files'
 import programRouter from './programs'
 import galleryRouter from './gallery'
 import baseRouter from './base'
+import contactRouter from './contacts'
+// const routes = ['user', 'auth', 'aricles']
+
 const router = Router()
 
 userRouter(router)
@@ -19,5 +22,6 @@ fileRouter(router)
 programRouter(router)
 galleryRouter(router)
 baseRouter(router)
+contactRouter(router)
 
 export default router

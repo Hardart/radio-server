@@ -8,8 +8,8 @@ const ContactSchema = new Schema(
   {
     label: { type: String, required: true },
     type: { type: String, enum: ContactType, required: true },
+    phoneId: { type: Schema.Types.ObjectId, ref: 'Phone' },
     mail: String,
-    phone: String,
     text: String,
     href: String
   },

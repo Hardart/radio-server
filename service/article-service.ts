@@ -3,6 +3,7 @@ import { Article, ArticleWithID } from '../models/Article'
 import { Category } from '../models/Category'
 import { Tag } from '../models/Tag'
 import type { QueryParams } from '../types/custom-request'
+import tagService from './tag-service'
 
 class ArticleService {
   async all() {
@@ -47,15 +48,15 @@ class ArticleService {
   }
 
   async add(data: Article) {
-    if (data.tags && data.tags.length)
-      data.tags.forEach(async (tag) => await Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
+    if (data.tags && data.tags.length) tagService.addOrUpdate(data.tags)
+    data.content = cleanArticleContent(data.content)
     const createdArticle = await Article.create(data)
     return createdArticle.populate('categoryId')
   }
 
   async updateOne(data: ArticleWithID) {
-    if (data.tags && data.tags.length)
-      data.tags.forEach(async (tag) => await Tag.updateOne({ title: tag }, { title: tag }, { upsert: true }))
+    if (data.tags && data.tags.length) tagService.addOrUpdate(data.tags)
+    data.content = cleanArticleContent(data.content)
     return await Article.findByIdAndUpdate(data.id, data, { new: true }).populate('categoryId')
   }
 
@@ -65,3 +66,7 @@ class ArticleService {
 }
 
 export default new ArticleService()
+
+function cleanArticleContent(content: string) {
+  return content.replace(/http:\/\/localhost:3068/gm, '')
+}

@@ -53,7 +53,8 @@ class UserService {
     if (!user) throw AppError.userUpdateFail(`Пользователя с ID: ${data.id} не существует`)
     const isPasswordsEqual = await bcrypt.compare(data.password, user.password)
     if (!isPasswordsEqual) throw AppError.userUpdateFail('Неверно указан текущий пароль')
-    data.password = await bcrypt.hash(data.password_new, 5)
+    const newPassword = data.password_new ? data.password_new : data.password
+    data.password = await bcrypt.hash(newPassword, 5)
     const updatedUser = await User.findByIdAndUpdate(data.id, data, { new: true })
     if (!updatedUser) throw AppError.userUpdateFail(`Ошибка при обновлении пользователя`)
     const tokens = tokenService.generateTokens(UserService.userData(updatedUser))
