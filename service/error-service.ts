@@ -11,14 +11,14 @@ export default class ErrorService {
   }
   static append(error: unknown) {
     try {
-      fs.appendFileSync('./logs/errors.txt', `${this.dateAndTime}: ${error}\n`, { encoding: 'utf-8' })
+      fs.appendFileSync('../logs/errors.txt', `${this.dateAndTime}: ${error}\n`, { encoding: 'utf-8' })
     } catch (error) {
       console.log(error)
     }
   }
   static saveStream(streamTitle?: string) {
     try {
-      fs.appendFileSync('./logs/stream.txt', `${this.dateAndTime}: ${streamTitle}\n`, { encoding: 'utf-8' })
+      fs.appendFileSync('../logs/stream.txt', `${this.dateAndTime}: ${streamTitle}\n`, { encoding: 'utf-8' })
     } catch (error) {
       console.log(error)
     }
