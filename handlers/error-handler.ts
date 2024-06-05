@@ -73,7 +73,9 @@ export default class AppError extends Error {
       { code: 11000, message: 'Новость с таким слагом уже существует' },
       { code: 'id', message: 'Параметр ID в запросе отсутствует или имеет не верный формат' }
     ]
-    const message = errors.find((er) => er.code == code)?.message || 'Не обработанная ошибка, сообщите разработчику'
+    const message =
+      errors.find((er) => er.code == code)?.message ||
+      `Не обработанная ошибка, сообщите разработчику. Код ошибки ${code}`
     return new AppError(400, message)
   }
 }

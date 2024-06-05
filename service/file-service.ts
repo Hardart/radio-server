@@ -13,7 +13,6 @@ class FileService {
       .flatMap((f) => {
         const fullPath = `${path}/${f}`
         return fullPath.replace(this.baseDir, '')
-        return fullPath
       })
       .filter((path) => {
         if (path.match(/\.(jpe?g|png|webp|avif)$/)) {
