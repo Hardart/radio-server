@@ -11,7 +11,7 @@ function deleteFolder(req: Request, res: Response, next: NextFunction) {
   const isFolder = !path.match(/\.(jpe?g|png|webp|avif)$/)
 
   try {
-    const dir = `./assets${path}`
+    const dir = `/home${path}`
     if (isFolder) {
       fs.rmdirSync(dir)
       req.body.status = true

@@ -4,8 +4,6 @@ class FileService {
   baseDir = process.env.NODE_EMV !== 'production' ? '/home' : '/Users/hardart/home'
   readImages(src: string) {
     const baseSrc = !src.includes(this.baseDir) ? `${this.baseDir}${src}` : src
-    console.log(baseSrc)
-
     return this.foldersMap(baseSrc)
   }
 

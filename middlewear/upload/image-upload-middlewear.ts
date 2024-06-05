@@ -1,6 +1,8 @@
 import multer from 'multer'
 import fs from 'fs'
 import crypto from 'crypto'
+import ErrorService from '../../service/error-service'
+import AppError from '../../handlers/error-handler'
 
 const getExtension = (fileSrc: string) => fileSrc.replace(/.+\./, '')
 const storage = multer.diskStorage({
@@ -10,15 +12,12 @@ const storage = multer.diskStorage({
     const imageId = crypto.randomBytes(8).toString('hex')
     const ext = getExtension(file.originalname)
     const fileName = `${imageId}.${ext}`
-    const dest =
-      folderName == 'news'
-        ? `/Users/hardart/home/images/${folderName}/${folderId}`
-        : `/Users/hardart/home/images/${folderName}`
-    console.log(fs.readdirSync('/home'))
+    const dest = folderName == 'news' ? `/home/images/${folderName}/${folderId}` : `/home/images/${folderName}`
     try {
       fs.mkdirSync(dest, { recursive: true })
     } catch (error) {
-      console.log(error)
+      ErrorService.append(error)
+      throw AppError.BadRequest('Произошла ошибка при сохранении файла, сообщите разработчику')
     }
 
     file.filename = fileName

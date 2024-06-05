@@ -28,7 +28,9 @@ export const ErrorHandler: ErrorRequestHandler = (err: AppError, req: Request, r
           res.status(err.statusCode).json({ status: ResponseStatuses.FAIL, message: err.message, errors: err.errors })
           break
         default:
-          res.status(statusCode).json({ status: ResponseStatuses.ERROR, message: 'Неизвестная ошибка, сообщите разработчику', errors })
+          res
+            .status(statusCode)
+            .json({ status: ResponseStatuses.ERROR, message: 'Неизвестная ошибка, сообщите разработчику', errors })
       }
 
       break

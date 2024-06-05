@@ -7,12 +7,12 @@ function deleteAllImagesById(req: Request, res: Response, next: NextFunction) {
     return next()
   }
   const fileID = (path as string).replace(/.+\//g, '').replace(/_.+/, '')
-  
+
   const clearPath = path.match(/.+(?=\/)/g)[0]
-  const dir = `./assets${clearPath}`
+  const dir = `/home${clearPath}`
   const files = fs.readdirSync(dir)
 
-  files.forEach(file => {
+  files.forEach((file) => {
     if (!file.includes(fileID)) return
     try {
       fs.unlinkSync(`${dir}/${file}`)
