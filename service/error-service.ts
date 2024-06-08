@@ -1,5 +1,6 @@
 import fs from 'fs'
 export default class ErrorService {
+  static logsRootPath = process.env.NODE_ENV === 'production' ? '../logs' : './logs'
   static get dateAndTime() {
     return Intl.DateTimeFormat('ru', {
       year: '2-digit',
@@ -9,18 +10,24 @@ export default class ErrorService {
       minute: '2-digit'
     }).format(new Date())
   }
+
   static append(error: unknown) {
     try {
-      fs.appendFileSync('../logs/errors.txt', `${this.dateAndTime}: ${error}\n`, { encoding: 'utf-8' })
+      const root = this.logsRootPath
+      fs.appendFileSync(`${root}/errors.txt`, `${this.dateAndTime}: ${error}\n`, { encoding: 'utf-8' })
     } catch (error) {
       console.log(error)
     }
   }
+
   static saveStream(streamTitle?: string) {
     try {
-      fs.appendFileSync('../logs/stream.txt', `${this.dateAndTime}: ${streamTitle}\n`, { encoding: 'utf-8' })
+      const root = this.logsRootPath
+      fs.appendFileSync(`${root}/stream.txt`, `${this.dateAndTime}: ${streamTitle}\n`, {
+        encoding: 'utf-8'
+      })
     } catch (error) {
-      console.log(error)
+      this.append(error)
     }
   }
 }

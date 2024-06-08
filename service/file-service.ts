@@ -1,7 +1,7 @@
 import fs from 'fs'
 
 class FileService {
-  baseDir = process.env.NODE_EMV !== 'production' ? '/home' : '/Users/hardart/home'
+  baseDir = process.env.MODE === 'dev' ? './assets/images/home' : '/home'
   readImages(src: string) {
     const baseSrc = !src.includes(this.baseDir) ? `${this.baseDir}${src}` : src
     return this.foldersMap(baseSrc)

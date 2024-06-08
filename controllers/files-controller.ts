@@ -6,8 +6,8 @@ import AppError from '../handlers/error-handler'
 class FileController extends BaseController {
   async upload(req: Request, res: Response, next: NextFunction) {
     if (!req.file) throw AppError.BadRequest('При загрузке изображения произошла ошибка')
-    const path = req.file.path.replace('/home', '')
-    // const path = req.file.path
+    const rootPath = process.env.MODE == 'dev' ? 'assets/images/home' : '/home'
+    const path = req.file.path.replace(rootPath, '')
     res.status(200).json(FileController.response({ path }))
   }
 
