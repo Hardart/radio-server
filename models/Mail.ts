@@ -2,7 +2,7 @@ import { Schema, model, InferSchemaType } from 'mongoose'
 
 const MailSchema = new Schema(
   {
-    title: { type: String, required: true }
+    address: { type: String, required: true }
   },
   { timestamps: false, versionKey: false, toObject: { virtuals: true } }
 )

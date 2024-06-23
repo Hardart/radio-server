@@ -1,4 +1,3 @@
-import { Contact, ContactWithID } from '../models/Contact'
 import { QueryParams } from '../types/custom-request'
 import articleService from './article-service'
 
@@ -55,19 +54,6 @@ const team = [
 class PageService {
   async hosts() {
     return team
-  }
-
-  async footerContacts() {
-    return await Contact.find().select('-createdAt -updatedAt')
-  }
-
-  async updateFooterContacts(contacts: ContactWithID[]) {
-    contacts.forEach(async (contact) => await Contact.findByIdAndUpdate(contact.id, contact))
-    return true
-  }
-
-  async addContacts(contact: Contact) {
-    return await Contact.create(contact)
   }
 
   async index(query: QueryParams) {

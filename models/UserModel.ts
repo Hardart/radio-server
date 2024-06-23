@@ -8,11 +8,11 @@ const UserSchema = new Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     avatar: String,
-    roles: { type: [String], default: ['editor'], required: true },
+    roles: { type: [String], default: ['editor'], required: true }
   },
   {
     timestamps: false,
-    versionKey: false,
+    versionKey: false
   }
 )
 
@@ -28,7 +28,7 @@ UserSchema.set('toObject', {
   virtuals: true,
   transform: function (_, ret) {
     ret.fullName = ret.lastName + ' ' + ret.firstName
-  },
+  }
 })
 UserSchema.set('toJSON', {
   versionKey: false,
@@ -36,7 +36,7 @@ UserSchema.set('toJSON', {
   transform: function (_, ret) {
     delete ret._id
     ret.fullName = ret.lastName + ' ' + ret.firstName
-  },
+  }
 })
 
 UserSchema.virtual('fullName').get(function () {

@@ -4,7 +4,7 @@ const PhoneSchema = new Schema(
   {
     number: { type: String, required: true }
   },
-  { timestamps: false, versionKey: false, toObject: { virtuals: true } }
+  { timestamps: false, versionKey: false }
 )
 
 PhoneSchema.set('toJSON', {
