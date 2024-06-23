@@ -7,7 +7,7 @@ const AddressSchema = new Schema(
     street: { type: String, required: true },
     city: { type: String },
     locality: { type: String },
-    houseNumber: { type: Number },
+    houseNumber: { type: String },
     appartment: { type: Number },
     zip: { type: Number, required: true },
     yaMapUrl: { type: String }
