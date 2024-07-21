@@ -68,5 +68,5 @@ class ArticleService {
 export default new ArticleService()
 
 function cleanArticleContent(content: string) {
-  return content.replace(/http:\/\/localhost:3068/gm, '')
+  return content.replace(/http:\/\/localhost:3068\/images\/home/gm, '')
 }
