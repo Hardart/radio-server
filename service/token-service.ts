@@ -8,7 +8,7 @@ class TokenService {
     const access = process.env.ACCESS_TOKEN
     const refresh = process.env.REFRESH_TOKEN
     if (!access || !refresh) throw AppError.NoEnvVariable('access or refresh')
-    const accessToken = jwt.sign(payload, access, { expiresIn: '30m', algorithm: 'HS512', noTimestamp: true })
+    const accessToken = jwt.sign(payload, access, { expiresIn: '1m', algorithm: 'HS512', noTimestamp: true })
     const refreshToken = jwt.sign(payload, refresh, { expiresIn: '3h' })
     return {
       accessToken,

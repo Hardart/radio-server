@@ -4,8 +4,9 @@ class BaseController {
   // static refreshAge = 1000 * 60 * 60 * 24 * 30 // 30 дней
   // static refreshAge = 1000 * 60 * 3 // 3 минуты
   // static refreshAge = 1000 * 60 * 30 // 30 минут
-  static refreshAge = 1000 * 60 * 60 * 3 // 3 часа
+  private static refreshAge = 1000 * 60 * 60 * 3 // 3 часа
   static refreshOptions = { maxAge: this.refreshAge, httpOnly: true }
+  static clearRefreshOptions = { maxAge: 0, httpOnly: true }
 
   static response(res?: object) {
     return {

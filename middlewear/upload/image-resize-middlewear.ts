@@ -18,8 +18,10 @@ export async function resizeImage(req: Request, res: Response, next: NextFunctio
       req.file.path = path
       break
     case 'gallery':
-      path = toPath(pathToOriginalFile, 75)
+      path = toPath(pathToOriginalFile, '1530x420')
       await sharp(pathToNewFile).resize({ width: 1530, height: 420 }).webp({ quality: 90 }).toFile(path)
+      path = toPath(pathToOriginalFile, '350x100')
+      await sharp(pathToNewFile).resize({ width: 350, height: 100 }).webp({ quality: 90 }).toFile(path)
       req.file.path = path
       break
     case 'news':

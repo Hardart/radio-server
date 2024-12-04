@@ -10,7 +10,7 @@ const app = express()
 app.use(express.json())
 app.use(express.static('assets'))
 app.use(cookerParser())
-app.use(cors({ credentials: true }))
+app.use(cors({ credentials: true, origin: 'http://localhost:5173' }))
 app.use('/api/v1/dashboard', routerV1)
 
 app.use('*', otherRoutes)

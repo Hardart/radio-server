@@ -23,6 +23,7 @@ class UserController extends BaseController {
   async logout(req: Request, res: Response) {
     const { refreshToken } = req.cookies
     const token = await userService.logout(refreshToken)
+    res.cookie('refreshToken', refreshToken, { ...UserController.clearRefreshOptions })
     res.status(200).json(token)
   }
 
