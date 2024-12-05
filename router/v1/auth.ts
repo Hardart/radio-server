@@ -3,7 +3,6 @@ import userController from '../../controllers/user-controller'
 import { asyncErrorHandler } from '../../handlers/error-handler'
 import { checkLoginData } from '../../middlewear/mongoose-middleware'
 import authMiddleware from '../../middlewear/auth-middleware'
-// import isAccessTokenMiddleware from '../../middlewear/is-access-token-middleware'
 
 function authRouter(router: Router) {
   router.post('/registration', authMiddleware, asyncErrorHandler(userController.registration))
