@@ -11,7 +11,11 @@ class TrackService {
   }
 
   async list() {
-    return await Track.find().select('-updatedAt -preview').sort({ createdAt: 'desc' })
+    return await Track.find().select('-updatedAt').sort({ createdAt: 'desc' })
+  }
+
+  async update(trackData: ITrackMetadata & { id: string }) {
+    return await Track.findByIdAndUpdate(trackData.id, trackData, { new: true })
   }
 
   async count() {
