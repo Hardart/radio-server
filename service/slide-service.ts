@@ -14,6 +14,10 @@ class SlideService {
     return await Slide.insertMany(slides)
   }
 
+  async deleteOne({ id }: { id: string }) {
+    return await Slide.findByIdAndDelete(id)
+  }
+
   async list() {
     return await Slide.find().select('-updatedAt -createdAt').sort({ priority: 'asc' })
   }
