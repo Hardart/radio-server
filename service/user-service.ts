@@ -35,7 +35,7 @@ class UserService {
     if (!refreshToken) throw AppError.UnathorizedError()
     const userData = tokenService.validateRefreshToken(refreshToken) // проверяем валидность refresh token
     const tokenData = await tokenService.getToken(refreshToken) // проверяем этот token в БД
-    if (!userData || !tokenData) throw AppError.UnathorizedError()
+    if (!userData || !tokenData) return null
     const user = await User.findById(userData.id)
     if (!user) throw Error('Пользователь не найден')
     const tokens = tokenService.generateTokens(UserService.userData(user))

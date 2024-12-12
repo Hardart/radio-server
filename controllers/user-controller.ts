@@ -29,9 +29,15 @@ class UserController extends BaseController {
 
   async refresh(req: Request, res: Response) {
     const { refreshToken: oldToken } = req.cookies
-    const { accessToken, refreshToken } = await userService.refresh(oldToken)
-    res.cookie('refreshToken', refreshToken, { ...UserController.refreshOptions })
-    res.status(200).json(UserController.response({ accessToken }))
+    const maybeTokens = await userService.refresh(oldToken)
+    if (maybeTokens) {
+      const { accessToken, refreshToken } = maybeTokens
+      res.cookie('refreshToken', refreshToken, { ...UserController.refreshOptions })
+      res.status(200).json(UserController.response({ accessToken }))
+    } else {
+      res.cookie('refreshToken', '', { ...UserController.clearRefreshOptions })
+      res.status(200).json({ status: 'fail' })
+    }
   }
 
   async update(req: Request, res: Response) {
