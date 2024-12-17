@@ -25,6 +25,7 @@ const ContactSchema = new Schema(
     ],
     addresses: [
       {
+        label: { type: String },
         id: { type: Schema.Types.ObjectId, ref: Address },
         description: String,
         priority: Number

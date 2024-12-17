@@ -20,16 +20,28 @@ class ContactService {
     return Phone.create(phone)
   }
 
+  async deletePhone(id: string) {
+    return Phone.findByIdAndDelete(id)
+  }
+
   async addMail(email: Mail) {
     return Mail.create(email)
+  }
+
+  async deleteMail(id: string) {
+    return Mail.findByIdAndDelete(id)
   }
 
   async addAddress(address: Address) {
     return Address.create(address)
   }
 
+  async deleteAddress(id: string) {
+    return Address.findByIdAndDelete(id)
+  }
+
   async footerContacts() {
-    return await Contact.findOne({ section: 'footer' }).select('-section, -phones._id -emails._id')
+    return await Contact.findOne({ section: 'footer' }).select('-section, -phones._id -emails._id -addresses._id')
   }
 
   async baseContacts() {

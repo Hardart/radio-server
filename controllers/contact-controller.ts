@@ -34,13 +34,28 @@ class ContactController extends BaseController {
     res.status(200).json(ContactController.response({ phone }))
   }
 
+  async deletePhone(req: Request, res: Response) {
+    const phone = await contactService.deletePhone(req.body.id)
+    res.status(200).json(ContactController.response({ phone }))
+  }
+
   async addMail(req: Request, res: Response) {
-    const email = await contactService.addMail(req.body)
-    res.status(200).json(ContactController.response({ email }))
+    const mail = await contactService.addMail(req.body)
+    res.status(200).json(ContactController.response({ mail }))
+  }
+
+  async deleteMail(req: Request, res: Response) {
+    const mail = await contactService.deleteMail(req.body.id)
+    res.status(200).json(ContactController.response({ mail }))
   }
 
   async addAddress(req: Request, res: Response) {
     const address = await contactService.addAddress(req.body)
+    res.status(200).json(ContactController.response({ address }))
+  }
+
+  async deleteAddress(req: Request, res: Response) {
+    const address = await contactService.deleteAddress(req.body.id)
     res.status(200).json(ContactController.response({ address }))
   }
 }

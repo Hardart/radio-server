@@ -1,9 +1,9 @@
 import type { Router } from 'express'
 
-// import authMiddleware from '../../middlewear/auth-middleware'
 import { asyncErrorHandler } from '../../handlers/error-handler'
 import contactController from '../../controllers/contact-controller'
-// import isAdminMiddleware from '../../middlewear/is-admin-middleware'
+import { checkId } from '../../middlewear/mongoose-middleware'
+import authMiddleware from '../../middlewear/auth-middleware'
 
 export default function settingsRouter(router: Router) {
   router.post('/contacts', asyncErrorHandler(contactController.list))
@@ -14,5 +14,7 @@ export default function settingsRouter(router: Router) {
   router.post('/settings/phone', asyncErrorHandler(contactController.addPhone))
   router.post('/settings/mail', asyncErrorHandler(contactController.addMail))
   router.post('/settings/address', asyncErrorHandler(contactController.addAddress))
-  // router.post('/phones-update', authMiddleware, asyncErrorHandler(slideController.updatePriority))
+  router.post('/settings/phone/delete', authMiddleware, checkId, asyncErrorHandler(contactController.deletePhone))
+  router.post('/settings/mail/delete', authMiddleware, checkId, asyncErrorHandler(contactController.deleteMail))
+  router.post('/settings/address/delete', authMiddleware, checkId, asyncErrorHandler(contactController.deleteAddress))
 }
