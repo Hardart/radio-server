@@ -23,7 +23,7 @@ export async function resizeImage(req: Request, res: Response, next: NextFunctio
       path = toPath(pathToOriginalFile, '1280x549')
       await sharp(pathToNewFile).resize({ width: 1280, height: 549 }).webp().toFile(path)
       path = toPath(pathToOriginalFile, '1024x439')
-      await sharp(pathToNewFile).resize({ width: 1024, height: 439 }).webp({ quality: 90 }).toFile(path)
+      await sharp(pathToNewFile).resize({ width: 1024, height: 439 }).webp({ quality: 95 }).toFile(path)
       path = toPath(pathToOriginalFile, '752x322')
       await sharp(pathToNewFile).resize({ width: 752, height: 322 }).webp({ quality: 90 }).toFile(path)
       path = toPath(pathToOriginalFile, '624x267')
