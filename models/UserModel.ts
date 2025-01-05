@@ -8,7 +8,7 @@ const UserSchema = new Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     avatar: String,
-    roles: { type: [String], default: ['editor'], required: true }
+    roles: { type: [String], default: ['host'], required: true }
   },
   {
     timestamps: false,
