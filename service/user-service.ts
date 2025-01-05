@@ -3,6 +3,23 @@ import { User } from '../models/UserModel'
 import tokenService from './token-service'
 import AppError from '../handlers/error-handler'
 
+// const hosts = [
+//   {
+//     id: '677a784ef2e5aac342025d17',
+//     fullName: 'Евгений Богомолов',
+//     position: ['host'],
+//     avatar: '/images/team/no_image.webp',
+//     programs: ['Шоу "Без названия"']
+//   },
+//   {
+//     id: '32r343fsdvhsvvnvvnjfn',
+//     fullName: 'Павел Планов',
+//     position: ['host'],
+//     avatar: '/images/team/no_image.webp',
+//     programs: ['Шоу "Без названия"']
+//   }
+// ]
+
 class UserService {
   async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
     const candidate = await User.findOne({ email })
@@ -66,7 +83,8 @@ class UserService {
   }
 
   async getHosts() {
-    return await User.find({ roles: 'host' }).select('-password')
+    const hosts = await User.find({ roles: 'host' })
+    return hosts
   }
 
   async findById(id: string) {
