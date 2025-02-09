@@ -55,7 +55,7 @@ class UserController extends BaseController {
   async add(req: Request, res: Response) {
     const userData = req.body
     if (!userData) throw AppError.UnathorizedError()
-    const user = await userService.add(userData)
+    const user = await userService.registration(userData)
     res.status(200).json(UserController.response({ user }))
   }
 

@@ -21,11 +21,11 @@ import AppError from '../handlers/error-handler'
 // ]
 
 class UserService {
-  async registration({ email, password, firstName, lastName, roles = ['editor'] }: User) {
-    const candidate = await User.findOne({ email })
-    if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${email} уже существует`)
-    const hashPassword = await bcrypt.hash(password, 5)
-    return await User.create({ email, password: hashPassword, firstName, lastName, roles })
+  async registration(user: User) {
+    const candidate = await User.findOne({ email: user.email })
+    if (candidate) throw AppError.BadRequest(`Пользователь с адресом ${user.email} уже существует`)
+    const hashPassword = await bcrypt.hash(user.password, 5)
+    return await User.create({ ...user, password: hashPassword })
   }
 
   async login({ email, password }: User) {
