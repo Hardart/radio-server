@@ -5,6 +5,7 @@ const ProgramSchema = new Schema(
     title: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
     isPublished: { type: Boolean, default: false },
+    showInMenu: { type: Boolean, default: false },
     description: String,
     image: String,
     color: String,
