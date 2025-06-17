@@ -83,7 +83,7 @@ class UserService {
   }
 
   async getHosts() {
-    const hosts = await User.find({ roles: 'host' })
+    const hosts = await User.find({ $and: [{ roles: 'host' }, { roles: { $ne: 'admin' } }] })
     return hosts
   }
 
