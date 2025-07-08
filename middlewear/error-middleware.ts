@@ -11,7 +11,10 @@ export const ErrorHandler: ErrorRequestHandler = (err: AppError, req: Request, r
 
   switch (process.env.NODE_ENV) {
     case 'development':
-      if (err instanceof mongoose.Error.ValidationError) console.error('%s: ValidationError 🧨', ResponseStatuses.ERROR)
+      if (err instanceof mongoose.Error.ValidationError) {
+        console.error('%s: ValidationError 🧨', ResponseStatuses.ERROR)
+        console.error(err.message)
+      }
       res.status(statusCode).json({ status, message, errors, stack, error: err })
       break
     case 'production':
