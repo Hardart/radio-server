@@ -60,17 +60,26 @@ class UserService {
     return { ...tokens, user: UserService.userData(user) }
   }
 
-  async getAll() {
-    return await User.find().select('-password')
+  async getAll({ user }: { user: User }) {
+    if (user.roles.includes('creator')) {
+      return await User.find().select('-password')
+    } else {
+      return await User.find({ roles: { $nin: ['creator'] } }).select('-password')
+    }
   }
 
-  async updateOne(data: User & { id: string; password_new: string }) {
+  async updateOne(data: Partial<User> & { id: string; password_new: string }) {
     const user = await User.findById(data.id)
     if (!user) throw AppError.userUpdateFail(`Пользователя с ID: ${data.id} не существует`)
-    const isPasswordsEqual = await bcrypt.compare(data.password, user.password)
-    if (!isPasswordsEqual) throw AppError.userUpdateFail('Неверно указан текущий пароль')
-    const newPassword = data.password_new ? data.password_new : data.password
-    data.password = await bcrypt.hash(newPassword, 5)
+    if (data.password) {
+      // const isPasswordsEqual = await bcrypt.compare(data.password, user.password)
+      // if (!isPasswordsEqual) throw AppError.userUpdateFail('Неверно указан текущий пароль')
+      const newPassword = data.password_new ? data.password_new : data.password
+      data.password = await bcrypt.hash(newPassword, 5)
+    } else {
+      delete data.password
+    }
+
     const updatedUser = await User.findByIdAndUpdate(data.id, data, { new: true })
     if (!updatedUser) throw AppError.userUpdateFail(`Ошибка при обновлении пользователя`)
     const tokens = tokenService.generateTokens(UserService.userData(updatedUser))
@@ -83,7 +92,12 @@ class UserService {
   }
 
   async getHosts() {
-    const hosts = await User.find({ $and: [{ roles: 'host' }, { roles: { $ne: 'admin' } }] })
+    const hosts = await User.find({
+      roles: {
+        $all: ['host'], // обязательно содержит "host"
+        $nin: ['admin', 'superadmin', 'creator'] // не содержит "admin" и "superadmin"
+      }
+    }).select(['-password'])
     return hosts
   }
 
@@ -93,7 +107,7 @@ class UserService {
 
   // NEED FIX
   private static userData(user: User) {
-    const { id, email, fullName, roles, avatar, firstName, lastName } = user as unknown as User & { id: string }
+    const { id, email, fullName, roles, avatar, firstName, lastName } = user as User & { id: string }
     return { id, email, fullName, roles, avatar, firstName, lastName }
   }
 }

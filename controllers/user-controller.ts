@@ -42,9 +42,9 @@ class UserController extends BaseController {
 
   async update(req: Request, res: Response) {
     const userData = req.body
-    const { accessToken, refreshToken } = await userService.updateOne(userData)
+    const { accessToken, refreshToken, user } = await userService.updateOne(userData)
     res.cookie('refreshToken', refreshToken, { ...UserController.refreshOptions })
-    res.status(200).json(UserController.response({ accessToken }))
+    res.status(200).json(UserController.response({ accessToken, user }))
   }
 
   async check(req: Request, res: Response) {
@@ -59,8 +59,8 @@ class UserController extends BaseController {
     res.status(200).json(UserController.response({ user }))
   }
 
-  async list(_: Request, res: Response) {
-    const users = await userService.getAll()
+  async list(req: Request, res: Response) {
+    const users = await userService.getAll(req.body)
     res.status(200).json(UserController.response({ users }))
   }
 
