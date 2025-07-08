@@ -9,7 +9,6 @@ import programRouter from './programs'
 import galleryRouter from './gallery'
 import baseRouter from './base'
 import settingsRouter from './settings'
-// const routes = ['user', 'auth', 'aricles']
 
 const router = Router()
 
