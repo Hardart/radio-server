@@ -11,6 +11,7 @@ function deleteAllImagesById(req: Request, res: Response, next: NextFunction) {
   const clearPath = path.match(/.+(?=\/)/g)[0]
   const rootImagesDir = process.env.MODE === 'dev' ? './assets/images/home' : '/home'
   const dir = `${rootImagesDir}${clearPath}`
+
   const files = fs.readdirSync(dir)
 
   files.forEach((file) => {
