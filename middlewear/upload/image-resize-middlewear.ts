@@ -78,22 +78,27 @@ export async function resizeImage(req: Request, res: Response, next: NextFunctio
         {
           width: 600,
           height: 600,
-          quality: 90
+          quality: 100
         },
         {
           width: 300,
           height: 300,
-          quality: 80
+          quality: 90
+        },
+        {
+          width: 250,
+          height: 250,
+          quality: 90
         },
         {
           width: 100,
           height: 100,
-          quality: 70
+          quality: 85
         },
         {
           width: 50,
           height: 50,
-          quality: 60
+          quality: 70
         }
       ]
 
