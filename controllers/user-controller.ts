@@ -16,6 +16,7 @@ class UserController extends BaseController {
     // const validErrors = validationResult(req)
     // if (!validErrors.isEmpty()) return next(ErrorApi.BadRequest('Ошибка при валидации', validErrors.array()))
     const { accessToken, refreshToken, user } = await userService.login(req.body)
+    user.avatar = replaceOriginalImage(user.avatar, 'preview')
     res.cookie('refreshToken', refreshToken, { ...UserController.refreshOptions })
     res.status(200).json(UserController.response({ accessToken, user }))
   }
@@ -81,3 +82,8 @@ class UserController extends BaseController {
 }
 
 export default new UserController()
+
+function replaceOriginalImage(src: string | null | undefined, quality: number | string) {
+  if (!src) return src
+  return src.replace('orig', `${quality}`)
+}

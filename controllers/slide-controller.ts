@@ -19,8 +19,8 @@ class SlideController extends BaseController {
   }
 
   async deleteOne(req: Request, res: Response) {
-    const id = await slideService.deleteOne(req.body)
-    res.status(200).json(SlideController.response({ id }))
+    const slide = await slideService.deleteOne(req.body)
+    res.status(200).json(SlideController.response({ id: slide?.id }))
   }
 }
 
