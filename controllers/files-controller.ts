@@ -8,6 +8,9 @@ class FileController extends BaseController {
     if (!req.file) throw AppError.BadRequest('При загрузке изображения произошла ошибка')
     const rootPath = process.env.MODE == 'dev' ? 'assets/images/home' : '/home'
     const path = req.file.path.replace(rootPath, '')
+    console.log('controller')
+    console.log(path)
+
     res.status(200).json(FileController.response({ path }))
   }
 

@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
     }
 
     file.filename = destructFile.fileName
+    console.log(destructFile.fileName)
 
     cb(null, dest)
   },
