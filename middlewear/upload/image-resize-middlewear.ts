@@ -71,6 +71,7 @@ export async function resizeImage(req: Request, res: Response, next: NextFunctio
         .resize({ width: 600, height: 360 })
         .webp({ quality: 90 })
         .toFile(toPath(pathToOriginalFile, 600))
+      sharp(pathToNewFile).resize({ width: 800 }).jpeg({ quality: 80 }).toFile(toPath(pathToOriginalFile, 800))
       req.file.path = toPath(pathToOriginalFile, 'orig')
       break
     case 'programs':
